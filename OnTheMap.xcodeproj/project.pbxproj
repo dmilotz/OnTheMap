@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1119B9A01DDAE0F6002E70D6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119B99F1DDAE0F6002E70D6 /* AppDelegate.swift */; };
-		1119B9A21DDAE0F6002E70D6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119B9A11DDAE0F6002E70D6 /* ViewController.swift */; };
+		1119B9A21DDAE0F6002E70D6 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119B9A11DDAE0F6002E70D6 /* MapViewController.swift */; };
 		1119B9A51DDAE0F6002E70D6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1119B9A31DDAE0F6002E70D6 /* Main.storyboard */; };
 		1119B9A71DDAE0F6002E70D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1119B9A61DDAE0F6002E70D6 /* Assets.xcassets */; };
 		1119B9AA1DDAE0F6002E70D6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1119B9A81DDAE0F6002E70D6 /* LaunchScreen.storyboard */; };
@@ -38,7 +38,7 @@
 /* Begin PBXFileReference section */
 		1119B99C1DDAE0F6002E70D6 /* OnTheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1119B99F1DDAE0F6002E70D6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		1119B9A11DDAE0F6002E70D6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		1119B9A11DDAE0F6002E70D6 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		1119B9A41DDAE0F6002E70D6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1119B9A61DDAE0F6002E70D6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1119B9A91DDAE0F6002E70D6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -102,7 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				1119B99F1DDAE0F6002E70D6 /* AppDelegate.swift */,
-				1119B9A11DDAE0F6002E70D6 /* ViewController.swift */,
+				1119B9A11DDAE0F6002E70D6 /* MapViewController.swift */,
 				1119B9A31DDAE0F6002E70D6 /* Main.storyboard */,
 				1119B9A61DDAE0F6002E70D6 /* Assets.xcassets */,
 				1119B9A81DDAE0F6002E70D6 /* LaunchScreen.storyboard */,
@@ -194,7 +194,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0810;
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Dirk Milotz";
 				TargetAttributes = {
 					1119B99B1DDAE0F6002E70D6 = {
@@ -266,7 +266,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1119B9CE1DDBFC53002E70D6 /* LoginViewController.swift in Sources */,
-				1119B9A21DDAE0F6002E70D6 /* ViewController.swift in Sources */,
+				1119B9A21DDAE0F6002E70D6 /* MapViewController.swift in Sources */,
 				1119B9A01DDAE0F6002E70D6 /* AppDelegate.swift in Sources */,
 				1119B9D01DDC0459002E70D6 /* Constants.swift in Sources */,
 			);
@@ -341,6 +341,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -391,6 +392,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -513,6 +515,7 @@
 				1119B9C61DDAE0F6002E70D6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		1119B9C71DDAE0F6002E70D6 /* Build configuration list for PBXNativeTarget "OnTheMapTests" */ = {
 			isa = XCConfigurationList;
@@ -521,6 +524,7 @@
 				1119B9C91DDAE0F6002E70D6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		1119B9CA1DDAE0F6002E70D6 /* Build configuration list for PBXNativeTarget "OnTheMapUITests" */ = {
 			isa = XCConfigurationList;
@@ -529,6 +533,7 @@
 				1119B9CC1DDAE0F6002E70D6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
