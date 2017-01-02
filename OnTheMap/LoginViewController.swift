@@ -94,9 +94,10 @@ class LoginViewController: UIViewController {
     }
     
     private func completeLogin() {
-            self.debugTextLabel.text = ""
+            OperationQueue.main.addOperation{
             let controller = self.storyboard!.instantiateViewController(withIdentifier: "TabBarController") as! UITabBarController
             self.present(controller, animated: true, completion: nil)
+        }
     }
     
 

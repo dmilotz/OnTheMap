@@ -16,6 +16,7 @@
 		1119B9C01DDAE0F6002E70D6 /* OnTheMapUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119B9BF1DDAE0F6002E70D6 /* OnTheMapUITests.swift */; };
 		1119B9CE1DDBFC53002E70D6 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119B9CD1DDBFC53002E70D6 /* LoginViewController.swift */; };
 		1119B9D01DDC0459002E70D6 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119B9CF1DDC0459002E70D6 /* Constants.swift */; };
+		1171DEF21E1A441000E667BC /* Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1171DEF11E1A441000E667BC /* Pin.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		1119B9C11DDAE0F6002E70D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1119B9CD1DDBFC53002E70D6 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		1119B9CF1DDC0459002E70D6 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		1171DEF11E1A441000E667BC /* Pin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pin.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +111,7 @@
 				1119B9AB1DDAE0F6002E70D6 /* Info.plist */,
 				1119B9CD1DDBFC53002E70D6 /* LoginViewController.swift */,
 				1119B9CF1DDC0459002E70D6 /* Constants.swift */,
+				1171DEF11E1A441000E667BC /* Pin.swift */,
 			);
 			path = OnTheMap;
 			sourceTree = "<group>";
@@ -267,6 +270,7 @@
 			files = (
 				1119B9CE1DDBFC53002E70D6 /* LoginViewController.swift in Sources */,
 				1119B9A21DDAE0F6002E70D6 /* MapViewController.swift in Sources */,
+				1171DEF21E1A441000E667BC /* Pin.swift in Sources */,
 				1119B9A01DDAE0F6002E70D6 /* AppDelegate.swift in Sources */,
 				1119B9D01DDC0459002E70D6 /* Constants.swift in Sources */,
 			);
