@@ -17,6 +17,9 @@
 		1119B9CE1DDBFC53002E70D6 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119B9CD1DDBFC53002E70D6 /* LoginViewController.swift */; };
 		1119B9D01DDC0459002E70D6 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119B9CF1DDC0459002E70D6 /* Constants.swift */; };
 		1171DEF21E1A441000E667BC /* Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1171DEF11E1A441000E667BC /* Pin.swift */; };
+		1171DEF41E1B59FE00E667BC /* EnterLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1171DEF31E1B59FE00E667BC /* EnterLocationViewController.swift */; };
+		1171DEF61E1B5E9700E667BC /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1171DEF51E1B5E9700E667BC /* TableViewController.swift */; };
+		1171DEF81E1B64FA00E667BC /* EnterLinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1171DEF71E1B64FA00E667BC /* EnterLinkViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +56,9 @@
 		1119B9CD1DDBFC53002E70D6 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		1119B9CF1DDC0459002E70D6 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		1171DEF11E1A441000E667BC /* Pin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pin.swift; sourceTree = "<group>"; };
+		1171DEF31E1B59FE00E667BC /* EnterLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnterLocationViewController.swift; sourceTree = "<group>"; };
+		1171DEF51E1B5E9700E667BC /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
+		1171DEF71E1B64FA00E667BC /* EnterLinkViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnterLinkViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +118,9 @@
 				1119B9CD1DDBFC53002E70D6 /* LoginViewController.swift */,
 				1119B9CF1DDC0459002E70D6 /* Constants.swift */,
 				1171DEF11E1A441000E667BC /* Pin.swift */,
+				1171DEF31E1B59FE00E667BC /* EnterLocationViewController.swift */,
+				1171DEF51E1B5E9700E667BC /* TableViewController.swift */,
+				1171DEF71E1B64FA00E667BC /* EnterLinkViewController.swift */,
 			);
 			path = OnTheMap;
 			sourceTree = "<group>";
@@ -269,8 +278,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				1119B9CE1DDBFC53002E70D6 /* LoginViewController.swift in Sources */,
+				1171DEF61E1B5E9700E667BC /* TableViewController.swift in Sources */,
 				1119B9A21DDAE0F6002E70D6 /* MapViewController.swift in Sources */,
+				1171DEF81E1B64FA00E667BC /* EnterLinkViewController.swift in Sources */,
 				1171DEF21E1A441000E667BC /* Pin.swift in Sources */,
+				1171DEF41E1B59FE00E667BC /* EnterLocationViewController.swift in Sources */,
 				1119B9A01DDAE0F6002E70D6 /* AppDelegate.swift in Sources */,
 				1119B9D01DDC0459002E70D6 /* Constants.swift in Sources */,
 			);

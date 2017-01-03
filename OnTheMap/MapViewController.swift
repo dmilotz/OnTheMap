@@ -16,6 +16,16 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     var pins: [Pin] = [Pin]()
     var flagDone: Bool = false
     
+    @IBAction func createPin(_ sender: Any) {
+        let controller = self.storyboard!.instantiateViewController(withIdentifier: "EnterLocationViewController") as! UIViewController
+        self.present(controller, animated: true, completion: nil)
+        
+    }
+    
+    @IBAction func refreshMap(_ sender: Any) {
+        self.parseRequest()
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -134,7 +144,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             //print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)
         }
         task.resume()
-        flagDone = true
+        
     }
     
     // MARK: - MKMapViewDelegate
