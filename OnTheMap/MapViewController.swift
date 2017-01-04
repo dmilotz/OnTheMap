@@ -17,7 +17,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     var flagDone: Bool = false
     
     @IBAction func createPin(_ sender: Any) {
-        let controller = self.storyboard!.instantiateViewController(withIdentifier: "EnterLocationViewController") as! UIViewController
+        let controller = self.storyboard!.instantiateViewController(withIdentifier: "EnterLocationViewController") 
         self.present(controller, animated: true, completion: nil)
         
     }

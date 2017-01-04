@@ -38,12 +38,73 @@ class TableViewController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
+        self.parseRequest()
         super.viewWillAppear(animated)
     }
 
+    
+    func parseRequest(){
+        
+        let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
+        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
+        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
+        let session = URLSession.shared
+        let task = session.dataTask(with: request as URLRequest) { data, response, error in
+            if error != nil { // Handle error...
+                return
+            }
+            
+            /* 5. Parse the data */
+            let parsedResult: [String:AnyObject]!
+            do {
+                parsedResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
+            } catch {
+                print("Could not parse the data as JSON: '\(data)'")
+                return
+            }
+            
+            /* GUARD: Is the "results" key in parsedResult? */
+            guard let results = parsedResult["results"] as? [[String:AnyObject]] else {
+                print("Cannot find key '\(Constants.TMDBResponseKeys.Results)' in \(parsedResult)")
+                return
+            }
+            
+            /* 6. Use the data! */
+            self.pins = Pin.pinsFromResults(results)
+            self.tableView.reloadData()
+   
+        }
+        task.resume()
+        
+    }
 
+
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.pins.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCell")!
+        let pin = self.pins[(indexPath as NSIndexPath).row]
+        
+        // Set the name and image
+        cell.textLabel?.text = (pin.firstName as! String) + " " + (pin.lastName as! String)
+        
+        
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let pin = self.pins[(indexPath as NSIndexPath).row]
+        UIApplication.shared.openURL(URL(string: pin.mediaUrl as! String)!)
+
+        
+    }
+    
 }
+
 //    //MARK: - ableViewController (UITableViewController)
 //
 //extension TableViewController {
