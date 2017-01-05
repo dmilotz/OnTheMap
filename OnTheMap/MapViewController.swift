@@ -120,24 +120,44 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             
             /* GUARD: Is the "results" key in parsedResult? */
             guard let results = parsedResult["results"] as? [[String:AnyObject]] else {
-                print("Cannot find key '\(Constants.TMDBResponseKeys.Results)' in \(parsedResult)")
+                print("Cannot find key '\("results")' in \(parsedResult)")
                 return
             }
+            
             
             /* 6. Use the data! */
             self.pins = Pin.pinsFromResults(results)
             
-            print(self.pins)
+            //print(self.pins)
             var annotations = [MKPointAnnotation]()
             for pin in self.pins{
-                let lat = CLLocationDegrees(pin.latitude as! Double)
-                let long = CLLocationDegrees(pin.longitude as! Double)
+                if pin.latitude == nil || pin.longitude == nil || pin.firstName == nil || pin.lastName == nil {
+                    break
+                }
+                else{
+                var lat = 0.0
+                var long = 0.0
+                if pin.latitude != nil{
+                   lat = CLLocationDegrees(pin.latitude!)
+                    
+                }
+                else{
+                    break
+                }
+                if pin.longitude != nil{
+                    long = CLLocationDegrees(pin.longitude!)
+
+                }
+                else{
+                    break
+                }
                 let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
                 let annotation = MKPointAnnotation()
                 annotation.coordinate = coordinate
-                annotation.title = "\(pin.firstName) \(pin.lastName)"
-                annotation.subtitle = pin.mediaUrl as? String
+                annotation.title = "\(pin.firstName!) \(pin.lastName!)"
+                annotation.subtitle = pin.mediaUrl
                 annotations.append(annotation)
+                }
             }
             
             self.mapView.addAnnotations(annotations)
@@ -182,67 +202,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             }
         }
     }
-    //    func mapView(mapView: MKMapView, annotationView: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-    //
-    //        if control == annotationView.rightCalloutAccessoryView {
-    //            let app = UIApplication.sharedApplication()
-    //            app.openURL(NSURL(string: annotationView.annotation.subtitle))
-    //        }
-    //    }
-    
-    // MARK: - Sample Data
-    
-    // Some sample data. This is a dictionary that is more or less similar to the
-    // JSON data that you will download from Parse.
-    
-    func hardCodedLocationData() -> [[String : AnyObject]] {
-        return  [
-            [
-                "createdAt" : "2015-02-24T22:27:14.456Z" as AnyObject,
-                "firstName" : "Jessica" as AnyObject,
-                "lastName" : "Uelmen" as AnyObject,
-                "latitude" : 28.1461248 as AnyObject,
-                "longitude" : -82.75676799999999 as AnyObject,
-                "mapString" : "Tarpon Springs, FL" as AnyObject,
-                "mediaURL" : "www.linkedin.com/in/jessicauelmen/en" as AnyObject,
-                "objectId" : "kj18GEaWD8" as AnyObject,
-                "uniqueKey" : 872458750 as AnyObject,
-                "updatedAt" : "2015-03-09T22:07:09.593Z" as AnyObject
-            ], [
-                "createdAt" : "2015-02-24T22:35:30.639Z"as AnyObject,
-                "firstName" : "Gabrielle"as AnyObject,
-                "lastName" : "Miller-Messner"as AnyObject,
-                "latitude" : 35.1740471as AnyObject,
-                "longitude" : -79.3922539as AnyObject,
-                "mapString" : "Southern Pines, NC"as AnyObject,
-                "mediaURL" : "http://www.linkedin.com/pub/gabrielle-miller-messner/11/557/60/en"as AnyObject,
-                "objectId" : "8ZEuHF5uX8"as AnyObject,
-                "uniqueKey" : 2256298598 as AnyObject,
-                "updatedAt" : "2015-03-11T03:23:49.582Z" as AnyObject
-            ], [
-                "createdAt" : "2015-02-24T22:30:54.442Z"as AnyObject,
-                "firstName" : "Jason"as AnyObject,
-                "lastName" : "Schatz"as AnyObject,
-                "latitude" : 37.7617as AnyObject,
-                "longitude" : -122.4216as AnyObject,
-                "mapString" : "18th and Valencia, San Francisco, CA"as AnyObject,
-                "mediaURL" : "http://en.wikipedia.org/wiki/Swift_%28programming_language%29"as AnyObject,
-                "objectId" : "hiz0vOTmrL"as AnyObject,
-                "uniqueKey" : 2362758535 as AnyObject,
-                "updatedAt" : "2015-03-10T17:20:31.828Z"as AnyObject
-            ], [
-                "createdAt" : "2015-03-11T02:48:18.321Z"as AnyObject,
-                "firstName" : "Jarrod"as AnyObject,
-                "lastName" : "Parkes"as AnyObject,
-                "latitude" : 34.73037as AnyObject,
-                "longitude" : -86.58611000000001as AnyObject,
-                "mapString" : "Huntsville, Alabama"as AnyObject,
-                "mediaURL" : "https://linkedin.com/in/jarrodparkes"as AnyObject,
-                "objectId" : "CDHfAy8sdp"as AnyObject,
-                "uniqueKey" : 996618664 as AnyObject,
-                "updatedAt" : "2015-03-13T03:37:58.389Z" as AnyObject
-            ]
-        ]
-    }
-}
+    //    func mapView(mapView: MKMapView, annotationView: MKAnnotationView, }
 
+}

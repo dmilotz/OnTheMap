@@ -18,7 +18,7 @@ class TableViewController: UITableViewController {
    
     
     @IBAction func createPin(_ sender: Any) {
-        let controller = self.storyboard!.instantiateViewController(withIdentifier: "EnterLocationViewController") as! UITabBarController
+        let controller = self.storyboard!.instantiateViewController(withIdentifier: "EnterLocationViewController") 
         self.present(controller, animated: true, completion: nil)
     }
     // MARK: Life Cycle
@@ -88,17 +88,19 @@ class TableViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCell")!
         let pin = self.pins[(indexPath as NSIndexPath).row]
-        
+        if pin.firstName == nil || pin.lastName == nil{
+             cell.textLabel?.text = "No Name Provided"}
+        else{
         // Set the name and image
-        cell.textLabel?.text = (pin.firstName as! String) + " " + (pin.lastName as! String)
+        cell.textLabel?.text = (pin.firstName)! + " " + (pin.lastName)!
         
-        
+        }
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let pin = self.pins[(indexPath as NSIndexPath).row]
-        UIApplication.shared.openURL(URL(string: pin.mediaUrl as! String)!)
+        UIApplication.shared.openURL(URL(string: pin.mediaUrl!)!)
 
         
     }

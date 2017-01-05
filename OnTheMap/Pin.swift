@@ -15,36 +15,36 @@ struct Pin {
     
     // MARK: Properties
     
-    let firstName: AnyObject
-    let lastName: AnyObject
-    let mapString: AnyObject
-    let mediaUrl: AnyObject
-    let longitude: AnyObject
-    let latitude: AnyObject
+    let firstName: String?
+    let lastName: String?
+    let mapString: String?
+    let mediaUrl: String?
+    let longitude: Double?
+    let latitude: Double?
     //let createdAt: Date
     let objectId: AnyObject
     
     // MARK: Initializers
     
     init(dictionary: [String:AnyObject]) {
-        firstName = dictionary["firstName"] as AnyObject
-        lastName = dictionary["lastName"] as! AnyObject
-        mapString = dictionary["mapString"] as! AnyObject
-        mediaUrl = dictionary["mediaURL"] as! AnyObject
-        longitude = dictionary["longitude"] as! AnyObject
-        latitude = dictionary["latitude"] as! AnyObject
+        firstName = dictionary["firstName"] as? String
+        lastName = dictionary["lastName"] as? String
+        mapString = dictionary["mapString"] as? String
+        mediaUrl = dictionary["mediaURL"] as? String
+        longitude = dictionary["longitude"] as? Double
+        latitude = dictionary["latitude"] as? Double
        // createdAt = dictionary["createdAt"] as! Date
-        objectId = dictionary["objectId"] as! AnyObject
+        objectId = dictionary["objectId"] as AnyObject
     }
     
     static func pinsFromResults(_ results: [[String:AnyObject]]) -> [Pin] {
-        
         var pins = [Pin]()
-        
         // iterate through array of dictionaries, each pin is a dictionary
         for result in results {
+
             pins.append(Pin(dictionary: result))
-        }
+            }
+
         
         return pins
     }
