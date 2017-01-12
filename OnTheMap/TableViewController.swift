@@ -14,7 +14,7 @@ class TableViewController: UITableViewController {
     // MARK: Properties
     
     var appDelegate: AppDelegate!
-    var pins: [Pin] = [Pin]()
+    var students: [OTMStudent] = [OTMStudent]()
    
     
     @IBAction func createPin(_ sender: Any) {
@@ -38,69 +38,74 @@ class TableViewController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.parseRequest()
+        //self.parseRequest()
         super.viewWillAppear(animated)
+        OTMClient.sharedInstance().getStudents { (students, error) in
+            if let students = students{
+                self.students = students
+            }
+        }
     }
 
     
-    func parseRequest(){
-        
-        let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
-        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
-        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
-        let session = URLSession.shared
-        let task = session.dataTask(with: request as URLRequest) { data, response, error in
-            if error != nil { // Handle error...
-                return
-            }
-            
-            /* 5. Parse the data */
-            let parsedResult: [String:AnyObject]!
-            do {
-                parsedResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
-            } catch {
-                print("Could not parse the data as JSON: '\(data)'")
-                return
-            }
-            
-            /* GUARD: Is the "results" key in parsedResult? */
-            guard let results = parsedResult["results"] as? [[String:AnyObject]] else {
-                print("Cannot find key '\(Constants.TMDBResponseKeys.Results)' in \(parsedResult)")
-                return
-            }
-            
-            /* 6. Use the data! */
-            self.pins = Pin.pinsFromResults(results)
-            self.tableView.reloadData()
-   
-        }
-        task.resume()
-        
-    }
+//    func parseRequest(){
+//        
+//        let request = NSMutableURLRequest(url: URL(string: Constants.ParameterKeys.url)!)
+//        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
+//        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
+//        let session = URLSession.shared
+//        let task = session.dataTask(with: request as URLRequest) { data, response, error in
+//            if error != nil { // Handle error...
+//                return
+//            }
+////            
+//            /* 5. Parse the data */
+//            let parsedResult: [String:AnyObject]!
+//            do {
+//                parsedResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
+//            } catch {
+//                print("Could not parse the data as JSON: '\(data)'")
+//                return
+//            }
+//            
+//            /* GUARD: Is the "results" key in parsedResult? */
+//            guard let results = parsedResult["results"] as? [[String:AnyObject]] else {
+//                print("Cannot find key '\(Constants.TMDBResponseKeys.Results)' in \(parsedResult)")
+//                return
+//            }
+////            
+//            /* 6. Use the data! */
+//            self.students = Pin.studentsFromResults(results)
+//            self.tableView.reloadData()
+//   
+//        }
+//        task.resume()
+//        
+//    }
 
 
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.pins.count
+        return self.students.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCell")!
-        let pin = self.pins[(indexPath as NSIndexPath).row]
-        if pin.firstName == nil || pin.lastName == nil{
+        let student = self.students[(indexPath as NSIndexPath).row]
+        if student.firstName == nil || student.lastName == nil{
              cell.textLabel?.text = "No Name Provided"}
         else{
         // Set the name and image
-        cell.textLabel?.text = (pin.firstName)! + " " + (pin.lastName)!
+        cell.textLabel?.text = (student.firstName)! + " " + (student.lastName)!
         
         }
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let pin = self.pins[(indexPath as NSIndexPath).row]
-        UIApplication.shared.openURL(URL(string: pin.mediaUrl!)!)
+        let student = self.students[(indexPath as NSIndexPath).row]
+        UIApplication.shared.openURL(URL(string: student.mediaUrl!)!)
 
         
     }

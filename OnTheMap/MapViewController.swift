@@ -13,17 +13,17 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     // The map. See the setup in the Storyboard file. Note particularly that the view controller
     // is set up as the map view's delegate.
     @IBOutlet weak var mapView: MKMapView!
-    var pins: [Pin] = [Pin]()
+    var students: [OTMStudent] = [OTMStudent]()
     var flagDone: Bool = false
     
-    @IBAction func createPin(_ sender: Any) {
-        let controller = self.storyboard!.instantiateViewController(withIdentifier: "EnterLocationViewController") 
+    @IBAction func createStudent(_ sender: Any) {
+        let controller = self.storyboard!.instantiateViewController(withIdentifier: "EnterLocationViewController")
         self.present(controller, animated: true, completion: nil)
-        
     }
+   
     
     @IBAction func refreshMap(_ sender: Any) {
-        self.parseRequest()
+       // self.parseRequest()
     }
     
     
@@ -74,98 +74,73 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
     }
     override func viewWillAppear(_ animated: Bool) {
-        self.parseRequest()
+        OTMClient.sharedInstance().getStudents { (students, error) in
+            if let students = students{
+            
+                self.students = students
+                
+                var annotations = [MKPointAnnotation]()
+                for Student in self.students{
+                    if Student.latitude == nil || Student.longitude == nil || Student.firstName == nil || Student.lastName == nil {
+                        break
+                    }
+                    else{
+                        var lat = 0.0
+                        var long = 0.0
+                        if Student.latitude != nil{
+                            lat = CLLocationDegrees(Student.latitude!)
+                            
+                        }
+                        else{
+                            break
+                        }
+                        if Student.longitude != nil{
+                            long = CLLocationDegrees(Student.longitude!)
+                            
+                        }
+                        else{
+                            break
+                        }
+                        let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
+                        let annotation = MKPointAnnotation()
+                        annotation.coordinate = coordinate
+                        annotation.title = "\(Student.firstName!) \(Student.lastName!)"
+                        annotation.subtitle = Student.mediaUrl
+                        annotations.append(annotation)
+                    }
+                }
+                
+                self.mapView.addAnnotations(annotations)
+            }
+        }
+    //   let results = OnTheMapClient.parseRequest()
 //        if(!flagDone){
 //            sleep(100)
 //        }
 //        var annotations = [MKPointAnnotation]()
 //        
-//        for pin in pins{
-//            let lat = CLLocationDegrees(pin.latitude as! Double)
-//            let long = CLLocationDegrees(pin.longitude as! Double)
+//        for Student in Students{
+//            let lat = CLLocationDegrees(Student.latitude as! Double)
+//            let long = CLLocationDegrees(Student.longitude as! Double)
 //            let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
 //            let annotation = MKPointAnnotation()
 //            annotation.coordinate = coordinate
-//            annotation.title = "\(pin.firstName) \(pin.lastName)"
-//            annotation.subtitle = pin.mediaUrl as! String
+//            annotation.title = "\(Student.firstName) \(Student.lastName)"
+//            annotation.subtitle = Student.mediaUrl as! String
 //            annotations.append(annotation)
 //            
 //        }
         
         // When the array is complete, we add the annotations to the map.
-        
+        /* 6. Use the data! */
+        //print(self.Students)
+    
+        //print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)
+
 
 
     }
     
-    func parseRequest(){
-        
-        let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
-        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
-        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
-        let session = URLSession.shared
-        let task = session.dataTask(with: request as URLRequest) { data, response, error in
-            if error != nil { // Handle error...
-                return
-            }
-            
-            /* 5. Parse the data */
-            let parsedResult: [String:AnyObject]!
-            do {
-                parsedResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
-            } catch {
-                print("Could not parse the data as JSON: '\(data)'")
-                return
-            }
-            
-            /* GUARD: Is the "results" key in parsedResult? */
-            guard let results = parsedResult["results"] as? [[String:AnyObject]] else {
-                print("Cannot find key '\("results")' in \(parsedResult)")
-                return
-            }
-            
-            
-            /* 6. Use the data! */
-            self.pins = Pin.pinsFromResults(results)
-            
-            //print(self.pins)
-            var annotations = [MKPointAnnotation]()
-            for pin in self.pins{
-                if pin.latitude == nil || pin.longitude == nil || pin.firstName == nil || pin.lastName == nil {
-                    break
-                }
-                else{
-                var lat = 0.0
-                var long = 0.0
-                if pin.latitude != nil{
-                   lat = CLLocationDegrees(pin.latitude!)
-                    
-                }
-                else{
-                    break
-                }
-                if pin.longitude != nil{
-                    long = CLLocationDegrees(pin.longitude!)
-
-                }
-                else{
-                    break
-                }
-                let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
-                let annotation = MKPointAnnotation()
-                annotation.coordinate = coordinate
-                annotation.title = "\(pin.firstName!) \(pin.lastName!)"
-                annotation.subtitle = pin.mediaUrl
-                annotations.append(annotation)
-                }
-            }
-            
-            self.mapView.addAnnotations(annotations)
-            //print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)
-        }
-        task.resume()
-        
-    }
     
     // MARK: - MKMapViewDelegate
     
@@ -174,21 +149,21 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     // method in TableViewDataSource.
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
-        let reuseId = "pin"
+        let reuseId = "Student"
         
-        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
+        var mapView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId)
         
-        if pinView == nil {
-            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-            pinView!.canShowCallout = true
-            pinView!.pinTintColor = .red
-            pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+        if mapView == nil {
+            mapView = MKAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            mapView!.canShowCallout = true
+            mapView!.tintColor = .red
+            mapView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
         }
         else {
-            pinView!.annotation = annotation
+            mapView!.annotation = annotation
         }
         
-        return pinView
+        return mapView
     }
     
     

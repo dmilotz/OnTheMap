@@ -28,11 +28,11 @@
             </objects>
             <point key="canvasLocation" x="170" y="50"/>
         </scene>
-        <!--Map-->
+        <!--Navigation Controller-->
         <scene sceneID="Xoa-TF-9KG">
             <objects>
                 <navigationController id="JZO-8g-o2Y" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Map" id="Wze-gm-uog"/>
+                    <tabBarItem key="tabBarItem" title="" image="Map" selectedImage="Map" id="Wze-gm-uog"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Bxa-v0-T1F">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -58,7 +58,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="94Z-lG-7JD" id="NKP-a1-mTd">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -87,11 +87,11 @@
             </objects>
             <point key="canvasLocation" x="1841" y="429"/>
         </scene>
-        <!--Table-->
+        <!--Navigation Controller-->
         <scene sceneID="2Yf-VW-WBD">
             <objects>
                 <navigationController id="r2U-eh-y3H" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Table" id="5aj-hl-361"/>
+                    <tabBarItem key="tabBarItem" title="" selectedImage="Table" id="5aj-hl-361"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="HEg-6l-UkG">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -124,9 +124,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="On The Map" id="yb2-39-TA5">
-                        <barButtonItem key="leftBarButtonItem" title="Pin" id="RzK-WU-Bbg">
+                        <barButtonItem key="leftBarButtonItem" title="New Location" id="zzV-LG-9nq">
                             <connections>
-                                <action selector="createPin:" destination="yBa-NF-svq" id="Op4-1x-A3X"/>
+                                <action selector="createStudent:" destination="yBa-NF-svq" id="83W-3s-Unw"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Refresh" id="EaK-FQ-Lcx">
@@ -341,5 +341,7 @@
     </scenes>
     <resources>
         <image name="Camera Icon" width="30" height="30"/>
+        <image name="Map" width="20" height="20"/>
+        <image name="Table" width="32" height="32"/>
     </resources>
 </document>

@@ -11,7 +11,7 @@ import UIKit
 
 // MARK: - Pin
 
-struct Pin {
+struct OTMStudent {
     
     // MARK: Properties
     
@@ -37,16 +37,16 @@ struct Pin {
         objectId = dictionary["objectId"] as AnyObject
     }
     
-    static func pinsFromResults(_ results: [[String:AnyObject]]) -> [Pin] {
-        var pins = [Pin]()
+    static func studentsFromResults(_ results: [[String:AnyObject]]) -> [OTMStudent] {
+        var students = [OTMStudent]()
         // iterate through array of dictionaries, each pin is a dictionary
         for result in results {
 
-            pins.append(Pin(dictionary: result))
+            students.append(OTMStudent(dictionary: result))
             }
 
         
-        return pins
+        return students
     }
     
 }
