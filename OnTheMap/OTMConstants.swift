@@ -7,7 +7,7 @@ import UIKit
 extension OTMClient{
 
     struct Constants {
-        
+        static let udacityLoginUrl = "https://www.udacity.com/api/session"
         static let parseUrl = "https://parse.udacity.com/parse/classes/StudentLocation"
         static let appId = "QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr"
         static let appIdHeader = "X-Parse-Application-Id"

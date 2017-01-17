@@ -17,7 +17,6 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var debugTextLabel: UILabel!
-    @IBOutlet var movieImageView: UIImageView!
     // MARK: Life Cycle
     
     override func viewDidLoad() {
@@ -40,56 +39,78 @@ class LoginViewController: UIViewController {
     }
     
     // MARK: Login
-    
+    private func displayError(_ error: String) {
+        OperationQueue.main.addOperation {
+            let alertController = UIAlertController(title: "Login Error", message:
+                error, preferredStyle: UIAlertControllerStyle.alert)
+            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default,handler: nil))
+            self.present(alertController, animated: true, completion: nil)
+        }
+       
+    }
     @IBAction func loginPressed(_ sender: AnyObject) {
         
         
         if usernameTextField.text!.isEmpty || passwordTextField.text!.isEmpty {
             debugTextLabel.text = "Username or Password Empty."
         } else {
-            let request = NSMutableURLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
-            let user = String(usernameTextField.text!)
-            let pass = String(passwordTextField.text!)
-            let postString  = "{\"udacity\": {\"username\":\"" + user! + "\", \"password\": \"" + pass! + "\"}}"
-            request.httpMethod = "POST"
-            request.addValue("application/json", forHTTPHeaderField: "Accept")
-            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.httpBody = postString.data(using: String.Encoding.utf8)
-            let session = URLSession.shared
-            print(postString)
-            let task = session.dataTask(with: request as URLRequest) { data, response, error in
-              
-                func displayError(_ error: String) {
-                    print(error)
-                    self.debugTextLabel.text = "Login Failed (Request Token)."
-
-                }
-                
-                /* GUARD: Was there an error? */
-                guard (error == nil) else {
-                    displayError("There was an error with your request: \(error)")
-                    return
-                }
-                
-                /* GUARD: Did we get a successful 2XX response? */
-                guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
-                    displayError("Your request returned a status code other than 2xx!")
-                    return
-                }
-                
-                /* GUARD: Was there any data returned? */
-                guard let data = data else {
-                    displayError("No data was returned by the request!")
-                    return
-                }
-
-                let range = Range(uncheckedBounds: (5, data.count - 5))
-                let newData = data.subdata(in: range)  /* subset response data! */
-                print(NSString(data: newData, encoding: String.Encoding.utf8.rawValue)!)
-                self.completeLogin()
-            }
-            task.resume()
+                OTMClient.sharedInstance().udacityLogin(usernameTextField.text!, password: passwordTextField.text!, completionHandlerLogin: { (results, error) in
+                    if (error != nil){
+                        self.debugTextLabel.text = String(describing: error)
+                        self.displayError(String(describing: error))
+                        return
+                    }else{
+                        self.completeLogin()
+                    }
+                    
+                })
             
+            
+            
+//            let request = NSMutableURLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
+//            let user = String(usernameTextField.text!)
+//            let pass = String(passwordTextField.text!)
+//            let postString  = "{\"udacity\": {\"username\":\"" + user! + "\", \"password\": \"" + pass! + "\"}}"
+//            request.httpMethod = "POST"
+//            request.addValue("application/json", forHTTPHeaderField: "Accept")
+//            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+//            request.httpBody = postString.data(using: String.Encoding.utf8)
+//            let session = URLSession.shared
+//            print(postString)
+//            let task = session.dataTask(with: request as URLRequest) { data, response, error in
+//              
+//                func displayError(_ error: String) {
+//                    print(error)
+//                    self.debugTextLabel.text = "Login Failed (Request Token)."
+//
+//                }
+//                
+//                /* GUARD: Was there an error? */
+//                guard (error == nil) else {
+//                    displayError("There was an error with your request: \(error)")
+//                    return
+//                }
+//                
+//                /* GUARD: Did we get a successful 2XX response? */
+//                guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
+//                    displayError("Your request returned a status code other than 2xx!")
+//                    return
+//                }
+//                
+//                /* GUARD: Was there any data returned? */
+//                guard let data = data else {
+//                    displayError("No data was returned by the request!")
+//                    return
+//                }
+//
+//                let range = Range(uncheckedBounds: (5, data.count - 5))
+//                let newData = data.subdata(in: range)  /* subset response data! */
+//                print(NSString(data: newData, encoding: String.Encoding.utf8.rawValue)!)
+//                self.completeLogin()
+//            }
+//            task.resume()
+//            
+//        }
         }
     }
     

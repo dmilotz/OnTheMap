@@ -24,7 +24,13 @@ class TableViewController: UITableViewController {
     // MARK: Life Cycle
     
     @IBAction func refreshTable(_ sender: Any) {
-    
+        OTMClient.sharedInstance().getStudents { (students, error) in
+            if let students = students{
+                self.students = students
+            }
+            self.tableView.reloadData()
+        }
+        
     }
     
     
@@ -44,6 +50,7 @@ class TableViewController: UITableViewController {
             if let students = students{
                 self.students = students
             }
+            self.tableView.reloadData()
         }
     }
 
@@ -97,7 +104,8 @@ class TableViewController: UITableViewController {
              cell.textLabel?.text = "No Name Provided"}
         else{
         // Set the name and image
-        cell.textLabel?.text = (student.firstName)! + " " + (student.lastName)!
+            
+            cell.textLabel?.text = (student.firstName)! + " " + (student.lastName)!
         
         }
         return cell
@@ -105,7 +113,20 @@ class TableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let student = self.students[(indexPath as NSIndexPath).row]
-        UIApplication.shared.openURL(URL(string: student.mediaUrl!)!)
+//        if student.mediaUrl != nil{
+//            print(student.mediaUrl)
+//            UIApplication.shared.openURL(URL(string: student.mediaUrl!)!)
+//        }
+        if let url = URL(string: student.mediaUrl!){
+            UIApplication.shared.openURL(url)
+        }
+        else{
+            let alertController = UIAlertController(title: "noMediaUrlAlert", message:
+                "No Url was Provided", preferredStyle: UIAlertControllerStyle.alert)
+            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default,handler: nil))
+            
+            self.present(alertController, animated: true, completion: nil)
+        }
 
         
     }
