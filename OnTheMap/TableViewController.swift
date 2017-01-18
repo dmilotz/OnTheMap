@@ -18,7 +18,7 @@ class TableViewController: UITableViewController {
    
     
     @IBAction func createPin(_ sender: Any) {
-        let controller = self.storyboard!.instantiateViewController(withIdentifier: "EnterLocationViewController") 
+        let controller = self.storyboard!.instantiateViewController(withIdentifier: "EnterStudentInfoViewController") 
         self.present(controller, animated: true, completion: nil)
     }
     // MARK: Life Cycle

@@ -17,7 +17,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     var flagDone: Bool = false
     
     @IBAction func createStudent(_ sender: Any) {
-        let controller = self.storyboard!.instantiateViewController(withIdentifier: "EnterLocationViewController")
+        let controller = self.storyboard!.instantiateViewController(withIdentifier: "EnterStudentInfoViewController")
         self.present(controller, animated: true, completion: nil)
     }
    

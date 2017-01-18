@@ -9,13 +9,13 @@
 import Foundation
 import UIKit
 import MapKit
-class EnterLinkViewController: UIViewController, MKMapViewDelegate{
+class EnterStudentInfoViewController: UIViewController, MKMapViewDelegate, UITextFieldDelegate{
     
     var locationName: String = ""
     var longitude: Double = 0
     var latitude: Double = 0
     
-    @IBOutlet var linkTextField: UITextView!
+//    @IBOutlet var textField: UITextField!
     
     @IBOutlet var studyingLabel: UILabel!
    
@@ -24,72 +24,49 @@ class EnterLinkViewController: UIViewController, MKMapViewDelegate{
     @IBOutlet var otmButton: UIButton!
     
     
-    @IBOutlet var locationTextField: UITextField!
+    @IBOutlet var textField: UITextField!
     
     
     @IBAction func Submit(_ sender: UIButton) {
-        print (sender.currentTitle!)
         switch sender.currentTitle! {
             case "Find On The Map":
-                self.locationName = locationTextField.text!
+                self.locationName = textField.text!
                 self.placePinLocation()
+                textField.resignFirstResponder()
             case "Submit":
                 self.postToParse()
             default: break
             }
         }
-//        
-//        let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
-//        request.httpMethod = "POST"
-//        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
-//        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
-//        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//       let postParams = "{\"uniqueKey\": \"1234\", \"firstName\": \"Dirk\", \"lastName\": \"Milotz\",\"mapString\": \""+locationName+"\", \"mediaURL\": \""+linkTextField.text+"\",\"latitude\": \(Double(latitude)), \"longitude\": \(Double(longitude))}"
-//        print (postParams)
-//        
-//        request.httpBody = postParams.data(using: String.Encoding.utf8)
-//        
-//        let session = URLSession.shared
-//        let task = session.dataTask(with: request as URLRequest) { data, response, error in
-//            if error != nil { // Handle error…
-//                return
-//            }
-//            print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)
-//
-//            print (response)
-//            guard (error == nil) else {
-//                print("There was an error with your request: \(error)")
-//                return
-//            }
-//            
-//            /* GUARD: Did we get a successful 2XX response? */
-//            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
-//                print("Your request returned a status code other than 2xx!")
-//                return
-//            }
-//            
-//            /* GUARD: Was there any data returned? */
-//            guard let data = data else {
-//                print("No data was returned by the request!")
-//                return
-//            }
-//            print(NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)
-//            
-//            OperationQueue.main.addOperation{
-//                let controller = self.storyboard!.instantiateViewController(withIdentifier: "TabBarController") as! UITabBarController
-//                self.present(controller, animated: true, completion: nil)
-//            }
-//
-//        }
-//        task.resume()
-        
-        
-    
  
+    override func viewDidLoad() {
+        textField.delegate = self
+    }
     
-
+   func viewWillAppear(){
+        mapView.isHidden = true
+        textField.isHidden = true
+        otmButton.setTitle("Find On The Map", for: UIControlState.normal)
+        textField.clearsOnBeginEditing = true
+    
+    }
+    
+    
+   func textFieldDidBeginEditing(_ textField: UITextField) {   textField.text = ""
+        
+    }
+    
+    func changeDisplayAfterLocationEntered(){
+        self.mapView.isHidden = false
+        self.otmButton.setTitle("Submit", for: UIControlState.normal)
+        self.textField.isHidden = false
+        self.studyingLabel.isHidden = true
+        self.textField.text = "Please enter a link to share."
+        
+    }
+    
     func postToParse(){
-        let postParams = "{\"uniqueKey\": \"1234\", \"firstName\": \"Dirk\", \"lastName\": \"Milotz\",\"mapString\": \""+locationName+"\", \"mediaURL\": \""+linkTextField.text+"\",\"latitude\": \(Double(latitude)), \"longitude\": \(Double(longitude))}"
+        let postParams = "{\"uniqueKey\": \"1234\", \"firstName\": \"Dirk\", \"lastName\": \"Milotz\",\"mapString\": \""+locationName+"\", \"mediaURL\": \""+textField.text!+"\",\"latitude\": \(Double(latitude)), \"longitude\": \(Double(longitude))}"
         
         OTMClient.sharedInstance().taskForPOSTMethod(url: OTMClient.Constants.parseUrl, jsonBody: postParams, completionHandlerForPOST: {(results,error) in
             if (error != nil){
@@ -101,20 +78,11 @@ class EnterLinkViewController: UIViewController, MKMapViewDelegate{
                     let controller = self.storyboard!.instantiateViewController(withIdentifier: "TabBarController") as! UITabBarController
                     self.present(controller, animated: true, completion: nil)
                 }
-
+                
             }
-            })
+        })
     }
-
-
     
-    
-   func viewWillAppear(){
-        mapView.isHidden = true
-        linkTextField.isHidden = true
-        otmButton.setTitle("Find On The Map", for: UIControlState.normal)
-    
-    }
     
     private func displayError(_ error: String) {
         OperationQueue.main.addOperation {
@@ -126,19 +94,17 @@ class EnterLinkViewController: UIViewController, MKMapViewDelegate{
         
     }
     
+    
     func placePinLocation(){
         CLGeocoder().geocodeAddressString(self.locationName, completionHandler: {(placemarks,error) in
             if error != nil {
-                print(error)
+                self.displayError("Location not found, please try again.")
                 return
             }
             if (placemarks?.count)! > 0 {
                 let placemark = placemarks?[0]
                 let location = placemark?.location
                 let coordinate = location?.coordinate
-
-            
-            
                 var annotations = [MKPointAnnotation]()
                 let lat = CLLocationDegrees((coordinate?.latitude)!)
                 let long = CLLocationDegrees((coordinate?.longitude)!)
@@ -148,11 +114,9 @@ class EnterLinkViewController: UIViewController, MKMapViewDelegate{
                 let annotation = MKPointAnnotation()
                 annotation.coordinate = locationCoordinate
                 annotations.append(annotation)
-                print(annotations)
                 self.mapView.addAnnotations(annotations)
-                self.locationTextField.isHidden = true
-                self.mapView.isHidden = false
-                self.otmButton.setTitle("Submit", for: UIControlState.normal)
+                self.changeDisplayAfterLocationEntered()
+                
             }
             
             

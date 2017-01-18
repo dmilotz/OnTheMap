@@ -21,9 +21,8 @@
 		1124C13B1E27315300B0A266 /* OTMUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1124C13A1E27315300B0A266 /* OTMUserInfo.swift */; };
 		1124C13D1E2C4D3100B0A266 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1124C13C1E2C4D3100B0A266 /* FBSDKLoginKit.framework */; };
 		1171DEF21E1A441000E667BC /* OTMStudent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1171DEF11E1A441000E667BC /* OTMStudent.swift */; };
-		1171DEF41E1B59FE00E667BC /* EnterLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1171DEF31E1B59FE00E667BC /* EnterLocationViewController.swift */; };
 		1171DEF61E1B5E9700E667BC /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1171DEF51E1B5E9700E667BC /* TableViewController.swift */; };
-		1171DEF81E1B64FA00E667BC /* EnterLinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1171DEF71E1B64FA00E667BC /* EnterLinkViewController.swift */; };
+		1171DEF81E1B64FA00E667BC /* EnterStudentInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1171DEF71E1B64FA00E667BC /* EnterStudentInfoViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,9 +63,8 @@
 		1124C13A1E27315300B0A266 /* OTMUserInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMUserInfo.swift; sourceTree = "<group>"; };
 		1124C13C1E2C4D3100B0A266 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		1171DEF11E1A441000E667BC /* OTMStudent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OTMStudent.swift; path = OnTheMap/OTMStudent.swift; sourceTree = "<group>"; };
-		1171DEF31E1B59FE00E667BC /* EnterLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EnterLocationViewController.swift; path = OnTheMap/EnterLocationViewController.swift; sourceTree = "<group>"; };
 		1171DEF51E1B5E9700E667BC /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TableViewController.swift; path = OnTheMap/TableViewController.swift; sourceTree = "<group>"; };
-		1171DEF71E1B64FA00E667BC /* EnterLinkViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EnterLinkViewController.swift; path = OnTheMap/EnterLinkViewController.swift; sourceTree = "<group>"; };
+		1171DEF71E1B64FA00E667BC /* EnterStudentInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EnterStudentInfoViewController.swift; path = OnTheMap/EnterStudentInfoViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,9 +167,8 @@
 			children = (
 				1119B9A11DDAE0F6002E70D6 /* MapViewController.swift */,
 				1119B9CD1DDBFC53002E70D6 /* LoginViewController.swift */,
-				1171DEF31E1B59FE00E667BC /* EnterLocationViewController.swift */,
 				1171DEF51E1B5E9700E667BC /* TableViewController.swift */,
-				1171DEF71E1B64FA00E667BC /* EnterLinkViewController.swift */,
+				1171DEF71E1B64FA00E667BC /* EnterStudentInfoViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -335,9 +332,8 @@
 				1171DEF61E1B5E9700E667BC /* TableViewController.swift in Sources */,
 				1119B9A21DDAE0F6002E70D6 /* MapViewController.swift in Sources */,
 				111F3A191E22003C003172D9 /* OTMClient.swift in Sources */,
-				1171DEF81E1B64FA00E667BC /* EnterLinkViewController.swift in Sources */,
+				1171DEF81E1B64FA00E667BC /* EnterStudentInfoViewController.swift in Sources */,
 				1171DEF21E1A441000E667BC /* OTMStudent.swift in Sources */,
-				1171DEF41E1B59FE00E667BC /* EnterLocationViewController.swift in Sources */,
 				1119B9A01DDAE0F6002E70D6 /* AppDelegate.swift in Sources */,
 				1124C13B1E27315300B0A266 /* OTMUserInfo.swift in Sources */,
 				1119B9D01DDC0459002E70D6 /* OTMConstants.swift in Sources */,
