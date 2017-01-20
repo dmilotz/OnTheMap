@@ -8,10 +8,12 @@
 
 import Foundation
 
-class OTMCurrentUser{
+struct OTMCurrentUser{
     
-    static var firstName:String = ""
-    static var lastName:String = ""
+    static var firstName = ""
+    static var lastName  = ""
+    static var sessionId = ""
+    static var userId = ""
     
-    
+ 
 }

@@ -8,11 +8,13 @@
 
 import UIKit
 import MapKit
+
 class MapViewController: UIViewController, MKMapViewDelegate {
     
     // The map. See the setup in the Storyboard file. Note particularly that the view controller
     // is set up as the map view's delegate.
-    @IBOutlet weak var mapView: MKMapView!
+ 
+    @IBOutlet var mapView: MKMapView!
     var students: [OTMStudent] = [OTMStudent]()
     var flagDone: Bool = false
     
@@ -23,60 +25,26 @@ class MapViewController: UIViewController, MKMapViewDelegate {
    
     
     @IBAction func refreshMap(_ sender: Any) {
-       // self.parseRequest()
+       getStudents()
     }
-    
-    
     override func viewDidLoad() {
-        super.viewDidLoad()
-            
-        
-            
-     
-        // The "locations" array is an array of dictionary objects that are similar to the JSON
-        // data that you can download from parse.
-        //let locations = hardCodedLocationData()
-        
-        // We will create an MKPointAnnotation for each dictionary in "locations". The
-        // point annotations will be stored in this array, and then provided to the map view.
-     //   var annotations = [MKPointAnnotation]()
-        
-        // The "locations" array is loaded with the sample data below. We are using the dictionaries
-        // to create map annotations. This would be more stylish if the dictionaries were being
-        // used to create custom structs. Perhaps StudentLocation structs.
-        
-//        for dictionary in locations {
-//
-//            // Notice that the float values are being used to create CLLocationDegree values.
-//            // This is a version of the Double type.
-//            let lat = CLLocationDegrees(dictionary["latitude"] as! Double)
-//            let long = CLLocationDegrees(dictionary["longitude"] as! Double)
-//            
-//            // The lat and long are used to create a CLLocationCoordinates2D instance.
-//            let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
-//            
-//            let first = dictionary["firstName"] as! String
-//            let last = dictionary["lastName"] as! String
-//            let mediaURL = dictionary["mediaURL"] as! String
-//            
-//            // Here we create the annotation and set its coordiate, title, and subtitle properties
-//            let annotation = MKPointAnnotation()
-//            annotation.coordinate = coordinate
-//            annotation.title = "\(first) \(last)"
-//            annotation.subtitle = mediaURL
-//            
-//            // Finally we place the annotation in an array of annotations.
-//            annotations.append(annotation)
-//        }
-        
-       
-        
+       //getStudents()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+       getStudents()
+    }
+    
+    
+    func checkForExistingStudent(){
         
     }
-    override func viewWillAppear(_ animated: Bool) {
+    
+    func getStudents(){
+        
         OTMClient.sharedInstance().getStudents { (students, error) in
             if let students = students{
-            
+                
                 self.students = students
                 
                 var annotations = [MKPointAnnotation]()
@@ -111,32 +79,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 }
                 
                 self.mapView.addAnnotations(annotations)
+               
             }
-        }
-    //   let results = OnTheMapClient.parseRequest()
-//        if(!flagDone){
-//            sleep(100)
-//        }
-//        var annotations = [MKPointAnnotation]()
-//        
-//        for Student in Students{
-//            let lat = CLLocationDegrees(Student.latitude as! Double)
-//            let long = CLLocationDegrees(Student.longitude as! Double)
-//            let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
-//            let annotation = MKPointAnnotation()
-//            annotation.coordinate = coordinate
-//            annotation.title = "\(Student.firstName) \(Student.lastName)"
-//            annotation.subtitle = Student.mediaUrl as! String
-//            annotations.append(annotation)
-//            
-//        }
-        
-        // When the array is complete, we add the annotations to the map.
-        /* 6. Use the data! */
-        //print(self.Students)
-    
-        //print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)
 
+        }
 
 
     }
@@ -144,31 +90,25 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     // MARK: - MKMapViewDelegate
     
-    // Here we create a view with a "right callout accessory view". You might choose to look into other
-    // decoration alternatives. Notice the similarity between this method and the cellForRowAtIndexPath
-    // method in TableViewDataSource.
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
-        let reuseId = "Student"
+        let reuseId = "pin"
         
-        var mapView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId)
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
         
-        if mapView == nil {
-            mapView = MKAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-            mapView!.canShowCallout = true
-            mapView!.tintColor = .red
-            mapView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+        if pinView == nil {
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView!.canShowCallout = true
+            pinView!.pinTintColor = .red
+            pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
         }
         else {
-            mapView!.annotation = annotation
+            pinView!.annotation = annotation
         }
         
-        return mapView
+        return pinView
     }
-    
-    
-    // This delegate method is implemented to respond to taps. It opens the system browser
-    // to the URL specified in the annotationViews subtitle property.
+
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if control == view.rightCalloutAccessoryView {
             let app = UIApplication.shared
@@ -177,6 +117,5 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             }
         }
     }
-    //    func mapView(mapView: MKMapView, annotationView: MKAnnotationView, }
 
 }

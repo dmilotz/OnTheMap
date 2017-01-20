@@ -26,17 +26,134 @@ class OTMClient : NSObject {
         super.init()
     }
     
+    private func convertToDictionary(text: String) -> [String: Any]? {
+        if let data = text.data(using: .utf8) {
+            do {
+                return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+        return nil
+    }
+    func udacityLogin(_ userName: String, password: String,   completionHandlerLogin: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) {
+        
+        
+        let jsonBody  = "{\"udacity\": {\"username\":\"" + userName + "\", \"password\": \"" + password + "\"}}"
+        
+        let request = NSMutableURLRequest(url: URL(string: OTMClient.Constants.udacityLoginUrl)!)
+        
+        request.httpBody = jsonBody.data(using: String.Encoding.utf8)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let session = URLSession.shared
+        let task = session.dataTask(with: request as URLRequest) { data, response, error in
+            
+            
+            func sendError(_ error: String) {
+                print(error)
+                let userInfo = [NSLocalizedDescriptionKey : error]
+                completionHandlerLogin(nil, NSError(domain: "UdacityLogin", code: 1, userInfo: userInfo))
+            }
+            
+            /* GUARD: Was there an error? */
+            guard (error == nil) else {
+                sendError("There was an error with your request: \(error)")
+                return
+            }
+            
+            /* GUARD: Did we get a successful 2XX response? */
+            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
+                sendError("Your request returned a status code other than 2xx!")
+                return
+            }
+            
+            /* GUARD: Was there any data returned? */
+            guard let data = data else {
+                sendError("No data was returned by the request!")
+                return
+            }
+            
+            
+            let convertedData = (NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)
+            
+            var parsedResult = String(convertedData)
+            
+            //Udacity server returning garbage characters......
+            
+            parsedResult = parsedResult.replacingOccurrences(of: ")]}'", with: "")
+            
+            let dict = self.convertToDictionary(text: parsedResult)
+            
+            
+            completionHandlerLogin(dict as AnyObject?, nil)
+        }
+        task.resume()
+        
+    }
     
     
+    func getUdacityStudentInfo( url : String, completionHandlerForGetStudent: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) {
+        
+        /* 1. Set the parameters */
+        
+        let request = NSMutableURLRequest(url: URL(string: url)!)
+        /* 4. Make the request */
+        let task = session.dataTask(with: request as URLRequest) { (data, response, error) in
+            
+            func sendError(_ error: String) {
+                print(error)
+                let userInfo = [NSLocalizedDescriptionKey : error]
+                completionHandlerForGetStudent(nil, NSError(domain: "taskForGETMethod", code: 1, userInfo: userInfo))
+            }
+            
+            /* GUARD: Was there an error? */
+            guard (error == nil) else {
+                sendError("There was an error with your request: \(error)")
+                return
+            }
+            
+            /* GUARD: Did we get a successful 2XX response? */
+            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
+                sendError("Your request returned a status code other than 2xx!")
+                return
+            }
+            
+            /* GUARD: Was there any data returned? */
+            guard let data = data else {
+                sendError("No data was returned by the request!")
+                return
+            }
+            
+            let convertedData = (NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)
+            
+            var parsedResult = String(convertedData)
+            
+            //Udacity server returning garbage characters......
+            
+            parsedResult = parsedResult.replacingOccurrences(of: ")]}'", with: "")
+            
+            let dict = self.convertToDictionary(text: parsedResult)
+            
+            completionHandlerForGetStudent(dict as AnyObject? , nil)
+            
+            
+        }
+        task.resume()
+    }
+    
+ 
   
     
-    func taskForGETMethod( completionHandlerForGET: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) -> URLSessionDataTask {
+    func taskForParseGETMethod( url : String, completionHandlerForGET: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) -> URLSessionDataTask {
         
         /* 1. Set the parameters */
         var parametersWithApiKey : [String:Any] = [:]
         parametersWithApiKey[ParameterKeys.ApiKey] = Constants.ApiKey as AnyObject?
         
-        let request = NSMutableURLRequest(url: URL(string: Constants.parseUrl)!)
+        let request = NSMutableURLRequest(url: URL(string: url)!)
         request.addValue(Constants.appId, forHTTPHeaderField: Constants.appIdHeader)
         request.addValue(Constants.apiKey, forHTTPHeaderField: Constants.apiKeyHeader)
         /* 4. Make the request */
@@ -66,6 +183,9 @@ class OTMClient : NSObject {
                 return
             }
             
+            let convertedData = (NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)
+            print(convertedData)
+            
             /* 5. Parse the data */
             let parsedResult: [String:AnyObject]!
             do {
@@ -87,7 +207,7 @@ class OTMClient : NSObject {
         return task
     }
     
-    func taskForPOSTMethod(url: String, jsonBody: String, completionHandlerForPOST: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) -> URLSessionDataTask {
+    func taskForParsePOSTMethod(url: String, jsonBody: String, completionHandlerForPOST: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) -> URLSessionDataTask {
         
         /* 1. Set the parameters */
         var parametersWithApiKey : [String:Any] = [:]
@@ -131,6 +251,9 @@ class OTMClient : NSObject {
                 return
             }
             
+            
+
+            
             /* 5/6. Parse the data and use the data (happens in completion handler) */
             self.convertDataWithCompletionHandler(data, completionHandlerForConvertData: completionHandlerForPOST)
         }
@@ -140,65 +263,8 @@ class OTMClient : NSObject {
         
         return task
     }
-    
-    
-    func udacityLogin(_ userName: String, password: String,   completionHandlerLogin: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) {
-        
-        
-        let jsonBody  = "{\"udacity\": {\"username\":\"" + userName + "\", \"password\": \"" + password + "\"}}"
-        
-        let request = NSMutableURLRequest(url: URL(string: Constants.udacityLoginUrl)!)
 
-        request.httpBody = jsonBody.data(using: String.Encoding.utf8)
-        request.httpMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let session = URLSession.shared
-        let task = session.dataTask(with: request as URLRequest) { data, response, error in
-            
-            
-            func sendError(_ error: String) {
-                print(error)
-                let userInfo = [NSLocalizedDescriptionKey : error]
-                completionHandlerLogin(nil, NSError(domain: "UdacityLogin", code: 1, userInfo: userInfo))
-            }
-            
-            /* GUARD: Was there an error? */
-            guard (error == nil) else {
-                sendError("There was an error with your request: \(error)")
-                return
-            }
-            
-            /* GUARD: Did we get a successful 2XX response? */
-            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
-                sendError("Your request returned a status code other than 2xx!")
-                return
-            }
-            
-            /* GUARD: Was there any data returned? */
-            guard let data = data else {
-                sendError("No data was returned by the request!")
-                return
-            }
-            
-            let range = Range(uncheckedBounds: (5, data.count - 5))
-            let newData = data.subdata(in: range)  /* subset response data! */
-            print(NSString(data: newData, encoding: String.Encoding.utf8.rawValue)!)
-            completionHandlerLogin(newData as AnyObject?, nil)
-           // print(NSString(data: newData, encoding: String.Encoding.utf8.rawValue)!)
-        }
-        task.resume()
-        
-    }
 
-//   private func displayError(_ error: String) {
-//        let alertController = UIAlertController(title: "Login Error", message:
-//            error, preferredStyle: UIAlertControllerStyle.alert)
-//        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default,handler: nil))
-//    
-//        self.rootViewController.present(alertController, animated: true, completion: nil)
-//    }
 
     //
     private func convertDataWithCompletionHandler(_ data: Data, completionHandlerForConvertData: (_ result: AnyObject?, _ error: NSError?) -> Void) {

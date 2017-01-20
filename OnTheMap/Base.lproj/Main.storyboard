@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ed2-xx-2s9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="FYv-w7-WbR">
     <device id="ipad12_9" orientation="landscape">
         <adaptation id="fullscreen"/>
     </device>
@@ -118,10 +118,10 @@
             </objects>
             <point key="canvasLocation" x="890" y="429"/>
         </scene>
-        <!--On The Map-->
+        <!--MapViewController-->
         <scene sceneID="p1H-U3-vPl">
             <objects>
-                <viewController storyboardIdentifier="MapViewController" id="yBa-NF-svq" customClass="MapViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MapViewController" title="MapViewController" id="yBa-NF-svq" customClass="MapViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="L3d-Br-OrL"/>
                         <viewControllerLayoutGuide type="bottom" id="GKr-UB-WPV"/>
@@ -132,14 +132,21 @@
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="tI1-oj-Eoq">
                                 <rect key="frame" x="0.0" y="72" width="1366" height="903"/>
+                                <connections>
+                                    <outlet property="delegate" destination="yBa-NF-svq" id="Zgx-fv-3tD"/>
+                                </connections>
                             </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="tI1-oj-Eoq" firstAttribute="top" secondItem="L3d-Br-OrL" secondAttribute="bottom" constant="8" id="3FC-JQ-fOg"/>
+                            <constraint firstAttribute="trailing" secondItem="tI1-oj-Eoq" secondAttribute="trailing" id="DxZ-DE-Na3"/>
                             <constraint firstAttribute="trailing" secondItem="tI1-oj-Eoq" secondAttribute="trailing" id="IyR-g4-TIV"/>
+                            <constraint firstItem="tI1-oj-Eoq" firstAttribute="top" secondItem="L3d-Br-OrL" secondAttribute="bottom" constant="8" id="Xfk-m6-xJY"/>
                             <constraint firstItem="GKr-UB-WPV" firstAttribute="top" secondItem="tI1-oj-Eoq" secondAttribute="bottom" id="epY-aL-4iA"/>
                             <constraint firstItem="tI1-oj-Eoq" firstAttribute="leading" secondItem="nJZ-XB-y0i" secondAttribute="leading" id="fW5-AX-5Vm"/>
+                            <constraint firstItem="tI1-oj-Eoq" firstAttribute="leading" secondItem="nJZ-XB-y0i" secondAttribute="leading" id="hyA-uQ-RdD"/>
+                            <constraint firstItem="GKr-UB-WPV" firstAttribute="top" secondItem="tI1-oj-Eoq" secondAttribute="bottom" id="l9o-BR-h5a"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="On The Map" id="yb2-39-TA5">
@@ -155,7 +162,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="mapView" destination="tI1-oj-Eoq" id="maM-yi-03w"/>
+                        <outlet property="mapView" destination="tI1-oj-Eoq" id="G1p-k1-bFu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z8i-vC-iBc" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -298,6 +305,19 @@
                                     <action selector="Submit:" destination="ed2-xx-2s9" eventType="touchUpInside" id="FTc-ST-jf7"/>
                                 </connections>
                             </button>
+                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hqt-Cu-qOH">
+                                <rect key="frame" x="0.0" y="0.0" width="1366" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <items>
+                                    <navigationItem title="Title" id="c8x-HW-QeV">
+                                        <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="afA-0a-kmo">
+                                            <connections>
+                                                <action selector="cancelButton:" destination="ed2-xx-2s9" id="Ex6-ZN-qvM"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>

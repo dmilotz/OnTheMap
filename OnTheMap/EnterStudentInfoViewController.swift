@@ -26,6 +26,9 @@ class EnterStudentInfoViewController: UIViewController, MKMapViewDelegate, UITex
     
     @IBOutlet var textField: UITextField!
     
+    @IBAction func cancelButton(_ sender: Any) {
+       goToMapView()
+    }
     
     @IBAction func Submit(_ sender: UIButton) {
         switch sender.currentTitle! {
@@ -51,9 +54,19 @@ class EnterStudentInfoViewController: UIViewController, MKMapViewDelegate, UITex
     
     }
     
+    func goToMapView(){
+        OperationQueue.main.addOperation{
+            let controller = self.storyboard!.instantiateViewController(withIdentifier: "TabBarController") as! UITabBarController
+            self.present(controller, animated: true, completion: nil)}
+    }
     
    func textFieldDidBeginEditing(_ textField: UITextField) {   textField.text = ""
         
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
     }
     
     func changeDisplayAfterLocationEntered(){
@@ -66,18 +79,15 @@ class EnterStudentInfoViewController: UIViewController, MKMapViewDelegate, UITex
     }
     
     func postToParse(){
-        let postParams = "{\"uniqueKey\": \"1234\", \"firstName\": \"Dirk\", \"lastName\": \"Milotz\",\"mapString\": \""+locationName+"\", \"mediaURL\": \""+textField.text!+"\",\"latitude\": \(Double(latitude)), \"longitude\": \(Double(longitude))}"
+        let postParams = "{\"uniqueKey\": \"" + OTMCurrentUser.userId + "\", \"firstName\": \"" + OTMCurrentUser.firstName + "\", \"lastName\": \"" + OTMCurrentUser.lastName + "\",\"mapString\": \""+locationName+"\", \"mediaURL\": \""+textField.text!+"\",\"latitude\": \(Double(latitude)), \"longitude\": \(Double(longitude))}"
         
-        OTMClient.sharedInstance().taskForPOSTMethod(url: OTMClient.Constants.parseUrl, jsonBody: postParams, completionHandlerForPOST: {(results,error) in
+        OTMClient.sharedInstance().taskForParsePOSTMethod(url: OTMClient.Constants.parseUrl, jsonBody: postParams, completionHandlerForPOST: {(results,error) in
             if (error != nil){
                 self.displayError(String(describing: error))
                 
             }
             else{
-                OperationQueue.main.addOperation{
-                    let controller = self.storyboard!.instantiateViewController(withIdentifier: "TabBarController") as! UITabBarController
-                    self.present(controller, animated: true, completion: nil)
-                }
+               self.goToMapView()
                 
             }
         })
@@ -146,6 +156,7 @@ class EnterStudentInfoViewController: UIViewController, MKMapViewDelegate, UITex
         
         return pinView
     }
+    
 
     
     

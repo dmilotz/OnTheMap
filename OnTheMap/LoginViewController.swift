@@ -60,58 +60,44 @@ class LoginViewController: UIViewController {
                         self.displayError(String(describing: error))
                         return
                     }else{
-                        self.completeLogin()
+                        self.setCurrentUser(results: results!)
+                        //self.completeLogin()
                     }
                     
                 })
             
-            
-            
-//            let request = NSMutableURLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
-//            let user = String(usernameTextField.text!)
-//            let pass = String(passwordTextField.text!)
-//            let postString  = "{\"udacity\": {\"username\":\"" + user! + "\", \"password\": \"" + pass! + "\"}}"
-//            request.httpMethod = "POST"
-//            request.addValue("application/json", forHTTPHeaderField: "Accept")
-//            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//            request.httpBody = postString.data(using: String.Encoding.utf8)
-//            let session = URLSession.shared
-//            print(postString)
-//            let task = session.dataTask(with: request as URLRequest) { data, response, error in
-//              
-//                func displayError(_ error: String) {
-//                    print(error)
-//                    self.debugTextLabel.text = "Login Failed (Request Token)."
-//
-//                }
-//                
-//                /* GUARD: Was there an error? */
-//                guard (error == nil) else {
-//                    displayError("There was an error with your request: \(error)")
-//                    return
-//                }
-//                
-//                /* GUARD: Did we get a successful 2XX response? */
-//                guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
-//                    displayError("Your request returned a status code other than 2xx!")
-//                    return
-//                }
-//                
-//                /* GUARD: Was there any data returned? */
-//                guard let data = data else {
-//                    displayError("No data was returned by the request!")
-//                    return
-//                }
-//
-//                let range = Range(uncheckedBounds: (5, data.count - 5))
-//                let newData = data.subdata(in: range)  /* subset response data! */
-//                print(NSString(data: newData, encoding: String.Encoding.utf8.rawValue)!)
-//                self.completeLogin()
-//            }
-//            task.resume()
-//            
-//        }
+
         }
+    }
+    
+    func setCurrentUser(results : AnyObject){
+        guard let accountInfo = results["account"] as? [String:AnyObject] else{
+            print("Can't find key 'account' in results")
+            return
+        }
+        
+        OTMCurrentUser.userId = accountInfo["key"] as! String
+        
+        print("User ID stored" + OTMCurrentUser.userId)
+        
+        OTMClient.sharedInstance().getUdacityStudentInfo(url: OTMClient.Constants.udacityGetUserUrl, completionHandlerForGetStudent: { (results, error) in
+            
+            if (error != nil){
+                print("error")
+                return
+            }
+            guard let parsedResults = results?["user"] as? [String:AnyObject] else{
+                print("Can't find 'user' in results")
+                return
+            }
+        
+            OTMCurrentUser.firstName = parsedResults["first_name"] as! String
+            OTMCurrentUser.lastName = parsedResults["last_name"] as! String
+            self.completeLogin()
+            
+        })
+        
+        
     }
     
     private func completeLogin() {

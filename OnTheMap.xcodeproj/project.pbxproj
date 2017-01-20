@@ -16,13 +16,14 @@
 		1119B9C01DDAE0F6002E70D6 /* OnTheMapUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119B9BF1DDAE0F6002E70D6 /* OnTheMapUITests.swift */; };
 		1119B9CE1DDBFC53002E70D6 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119B9CD1DDBFC53002E70D6 /* LoginViewController.swift */; };
 		1119B9D01DDC0459002E70D6 /* OTMConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1119B9CF1DDC0459002E70D6 /* OTMConstants.swift */; };
-		111F3A191E22003C003172D9 /* OTMClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111F3A181E22003C003172D9 /* OTMClient.swift */; };
+		111F3A191E22003C003172D9 /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111F3A181E22003C003172D9 /* NetworkClient.swift */; };
 		1124C1391E27176000B0A266 /* OTMConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1124C1381E27176000B0A266 /* OTMConvenience.swift */; };
-		1124C13B1E27315300B0A266 /* OTMUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1124C13A1E27315300B0A266 /* OTMUserInfo.swift */; };
+		1124C13B1E27315300B0A266 /* OTMCurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1124C13A1E27315300B0A266 /* OTMCurrentUser.swift */; };
 		1124C13D1E2C4D3100B0A266 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1124C13C1E2C4D3100B0A266 /* FBSDKLoginKit.framework */; };
 		1171DEF21E1A441000E667BC /* OTMStudent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1171DEF11E1A441000E667BC /* OTMStudent.swift */; };
 		1171DEF61E1B5E9700E667BC /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1171DEF51E1B5E9700E667BC /* TableViewController.swift */; };
 		1171DEF81E1B64FA00E667BC /* EnterStudentInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1171DEF71E1B64FA00E667BC /* EnterStudentInfoViewController.swift */; };
+		11C04F1B1E3085BB009D23FC /* CurrentUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C04F1A1E3085BB009D23FC /* CurrentUserInfo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,13 +59,14 @@
 		1119B9C11DDAE0F6002E70D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1119B9CD1DDBFC53002E70D6 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = OnTheMap/LoginViewController.swift; sourceTree = "<group>"; };
 		1119B9CF1DDC0459002E70D6 /* OTMConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OTMConstants.swift; path = OnTheMap/OTMConstants.swift; sourceTree = "<group>"; };
-		111F3A181E22003C003172D9 /* OTMClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OTMClient.swift; path = OnTheMap/OTMClient.swift; sourceTree = "<group>"; };
+		111F3A181E22003C003172D9 /* NetworkClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NetworkClient.swift; path = OnTheMap/NetworkClient.swift; sourceTree = "<group>"; };
 		1124C1381E27176000B0A266 /* OTMConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMConvenience.swift; sourceTree = "<group>"; };
-		1124C13A1E27315300B0A266 /* OTMUserInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMUserInfo.swift; sourceTree = "<group>"; };
+		1124C13A1E27315300B0A266 /* OTMCurrentUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMCurrentUser.swift; sourceTree = "<group>"; };
 		1124C13C1E2C4D3100B0A266 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		1171DEF11E1A441000E667BC /* OTMStudent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OTMStudent.swift; path = OnTheMap/OTMStudent.swift; sourceTree = "<group>"; };
 		1171DEF51E1B5E9700E667BC /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TableViewController.swift; path = OnTheMap/TableViewController.swift; sourceTree = "<group>"; };
 		1171DEF71E1B64FA00E667BC /* EnterStudentInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EnterStudentInfoViewController.swift; path = OnTheMap/EnterStudentInfoViewController.swift; sourceTree = "<group>"; };
+		11C04F1A1E3085BB009D23FC /* CurrentUserInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentUserInfo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,11 +186,12 @@
 		1124C1371E2711F800B0A266 /* OTM */ = {
 			isa = PBXGroup;
 			children = (
-				111F3A181E22003C003172D9 /* OTMClient.swift */,
+				111F3A181E22003C003172D9 /* NetworkClient.swift */,
 				1119B9CF1DDC0459002E70D6 /* OTMConstants.swift */,
 				1124C1381E27176000B0A266 /* OTMConvenience.swift */,
 				1171DEF11E1A441000E667BC /* OTMStudent.swift */,
-				1124C13A1E27315300B0A266 /* OTMUserInfo.swift */,
+				1124C13A1E27315300B0A266 /* OTMCurrentUser.swift */,
+				11C04F1A1E3085BB009D23FC /* CurrentUserInfo.swift */,
 			);
 			name = OTM;
 			sourceTree = "<group>";
@@ -261,6 +264,7 @@
 				TargetAttributes = {
 					1119B99B1DDAE0F6002E70D6 = {
 						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = 766WEDGHA7;
 						ProvisioningStyle = Automatic;
 					};
 					1119B9AF1DDAE0F6002E70D6 = {
@@ -331,12 +335,13 @@
 				1119B9CE1DDBFC53002E70D6 /* LoginViewController.swift in Sources */,
 				1171DEF61E1B5E9700E667BC /* TableViewController.swift in Sources */,
 				1119B9A21DDAE0F6002E70D6 /* MapViewController.swift in Sources */,
-				111F3A191E22003C003172D9 /* OTMClient.swift in Sources */,
+				111F3A191E22003C003172D9 /* NetworkClient.swift in Sources */,
 				1171DEF81E1B64FA00E667BC /* EnterStudentInfoViewController.swift in Sources */,
 				1171DEF21E1A441000E667BC /* OTMStudent.swift in Sources */,
 				1119B9A01DDAE0F6002E70D6 /* AppDelegate.swift in Sources */,
-				1124C13B1E27315300B0A266 /* OTMUserInfo.swift in Sources */,
+				1124C13B1E27315300B0A266 /* OTMCurrentUser.swift in Sources */,
 				1119B9D01DDC0459002E70D6 /* OTMConstants.swift in Sources */,
+				11C04F1B1E3085BB009D23FC /* CurrentUserInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,6 +418,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -432,7 +438,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -464,6 +470,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -477,7 +484,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -490,6 +497,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 766WEDGHA7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -506,6 +514,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 766WEDGHA7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
