@@ -33,6 +33,20 @@ class TableViewController: UITableViewController {
         
     }
     
+    @IBAction func logout(_ sender: Any) {
+            OTMClient.sharedInstance().logoutFromUdacity(completionHandlerLogout: { (results, error) in
+                if (error != nil){
+                    self.displayAlert(String(describing: error), title: "Problem logging out")
+                    return
+                }
+                OperationQueue.main.addOperation {
+
+                self.view.window!.rootViewController?.dismiss(animated: false, completion: nil)
+                }
+            })
+        }
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,7 +68,15 @@ class TableViewController: UITableViewController {
         }
     }
 
-
+    private func displayAlert(_ message: String, title: String) {
+        OperationQueue.main.addOperation {
+            let alertController = UIAlertController(title: title, message:
+                message, preferredStyle: UIAlertControllerStyle.alert)
+            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default,handler: nil))
+            self.present(alertController, animated: true, completion: nil)
+        }
+        
+    }
 
 
     

@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 import MapKit
-class EnterStudentInfoViewController: UIViewController, MKMapViewDelegate, UITextFieldDelegate{
+class EnterStudentInfoViewController: UIViewController, MKMapViewDelegate, UITextFieldDelegate, UITextViewDelegate{
     
     var locationName: String = ""
     var longitude: Double = 0
@@ -17,13 +17,14 @@ class EnterStudentInfoViewController: UIViewController, MKMapViewDelegate, UITex
     
 //    @IBOutlet var textField: UITextField!
     
-    @IBOutlet var studyingLabel: UILabel!
+  //  @IBOutlet var studyingLabel: UILabel!
    
     @IBOutlet var mapView: MKMapView!
 
     @IBOutlet var otmButton: UIButton!
     
     
+    @IBOutlet var linkTextView: UITextView!
     @IBOutlet var textField: UITextField!
     
     @IBAction func cancelButton(_ sender: Any) {
@@ -44,11 +45,14 @@ class EnterStudentInfoViewController: UIViewController, MKMapViewDelegate, UITex
  
     override func viewDidLoad() {
         textField.delegate = self
+        linkTextView.delegate = self
+        linkTextView.text = "Where are you studying today?"
+
     }
     
    func viewWillAppear(){
         mapView.isHidden = true
-        textField.isHidden = true
+        textField.isHidden = false
         otmButton.setTitle("Find On The Map", for: UIControlState.normal)
         textField.clearsOnBeginEditing = true
     
@@ -61,25 +65,34 @@ class EnterStudentInfoViewController: UIViewController, MKMapViewDelegate, UITex
     }
     
    func textFieldDidBeginEditing(_ textField: UITextField) {   textField.text = ""
-        
+    
     }
+    
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false
     }
     
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        linkTextView.text=""
+    }
+    
+    
     func changeDisplayAfterLocationEntered(){
         self.mapView.isHidden = false
         self.otmButton.setTitle("Submit", for: UIControlState.normal)
-        self.textField.isHidden = false
-        self.studyingLabel.isHidden = true
-        self.textField.text = "Please enter a link to share."
+        self.textField.isHidden = true
+       // self.studyingLabel.isHidden = true
+        self.linkTextView.isHidden = false
+        self.linkTextView.isEditable = true
+        self.linkTextView.text = "Enter a link to share here..."
+        
         
     }
     
     func postToParse(){
-        let postParams = "{\"uniqueKey\": \"" + OTMCurrentUser.userId + "\", \"firstName\": \"" + OTMCurrentUser.firstName + "\", \"lastName\": \"" + OTMCurrentUser.lastName + "\",\"mapString\": \""+locationName+"\", \"mediaURL\": \""+textField.text!+"\",\"latitude\": \(Double(latitude)), \"longitude\": \(Double(longitude))}"
+        let postParams = "{\"uniqueKey\": \"" + OTMCurrentUser.userId + "\", \"firstName\": \"" + OTMCurrentUser.firstName + "\", \"lastName\": \"" + OTMCurrentUser.lastName + "\",\"mapString\": \""+locationName+"\", \"mediaURL\": \""+linkTextView.text!+"\",\"latitude\": \(Double(latitude)), \"longitude\": \(Double(longitude))}"
         
         OTMClient.sharedInstance().taskForParsePOSTMethod(url: OTMClient.Constants.parseUrl, jsonBody: postParams, completionHandlerForPOST: {(results,error) in
             if (error != nil){

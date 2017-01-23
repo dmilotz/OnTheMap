@@ -36,6 +36,9 @@ class OTMClient : NSObject {
         }
         return nil
     }
+    
+    
+    
     func udacityLogin(_ userName: String, password: String,   completionHandlerLogin: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) {
         
         
@@ -95,6 +98,7 @@ class OTMClient : NSObject {
     }
     
     
+    
     func getUdacityStudentInfo( url : String, completionHandlerForGetStudent: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) {
         
         /* 1. Set the parameters */
@@ -144,8 +148,34 @@ class OTMClient : NSObject {
         task.resume()
     }
     
- 
-  
+    func logoutFromUdacity(completionHandlerLogout: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void){
+        
+        let request = NSMutableURLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
+        request.httpMethod = "DELETE"
+        var xsrfCookie: HTTPCookie? = nil
+        let sharedCookieStorage = HTTPCookieStorage.shared
+        for cookie in sharedCookieStorage.cookies! {
+            if cookie.name == "XSRF-TOKEN" { xsrfCookie = cookie }
+        }
+        if let xsrfCookie = xsrfCookie {
+            request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
+        }
+        let session = URLSession.shared
+        let task = session.dataTask(with: request as URLRequest) { data, response, error in
+            if error != nil { // Handle error…
+                return
+            }
+            let range = Range(uncheckedBounds: (5, data!.count - 5))
+            let newData = data?.subdata(in: range) /* subset response data! */
+            print(NSString(data: newData!, encoding: String.Encoding.utf8.rawValue)!)
+    
+            completionHandlerLogout(newData as AnyObject?, error as NSError?)
+        }
+        task.resume()
+        
+    }
+    
+    
     
     func taskForParseGETMethod( url : String, completionHandlerForGET: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) -> URLSessionDataTask {
         
@@ -195,7 +225,7 @@ class OTMClient : NSObject {
                 return
             }
             print("ParsedResult = " + String(describing: parsedResult))
-        
+            
             completionHandlerForGET(parsedResult as AnyObject?, nil)
             
             
@@ -214,7 +244,7 @@ class OTMClient : NSObject {
         parametersWithApiKey[ParameterKeys.ApiKey] = Constants.ApiKey as AnyObject?
         
         /* 2/3. Build the URL, Configure the request */
-//        let request = NSMutableURLRequest(url:parseURLFromParameters(parametersWithApiKey as [String : AnyObject]))
+        //        let request = NSMutableURLRequest(url:parseURLFromParameters(parametersWithApiKey as [String : AnyObject]))
         let request = NSMutableURLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
         request.addValue(Constants.appId, forHTTPHeaderField: Constants.appIdHeader)
@@ -252,7 +282,7 @@ class OTMClient : NSObject {
             }
             
             
-
+            
             
             /* 5/6. Parse the data and use the data (happens in completion handler) */
             self.convertDataWithCompletionHandler(data, completionHandlerForConvertData: completionHandlerForPOST)
@@ -263,9 +293,9 @@ class OTMClient : NSObject {
         
         return task
     }
-
-
-
+    
+    
+    
     //
     private func convertDataWithCompletionHandler(_ data: Data, completionHandlerForConvertData: (_ result: AnyObject?, _ error: NSError?) -> Void) {
         
@@ -295,7 +325,7 @@ class OTMClient : NSObject {
         }
         
         print(components)
-    
+        
         return components.url!
     }
     
