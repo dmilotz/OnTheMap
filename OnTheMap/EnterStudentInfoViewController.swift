@@ -15,9 +15,7 @@ class EnterStudentInfoViewController: UIViewController, MKMapViewDelegate, UITex
     var longitude: Double = 0
     var latitude: Double = 0
     
-//    @IBOutlet var textField: UITextField!
-    
-  //  @IBOutlet var studyingLabel: UILabel!
+
    
     @IBOutlet var waitingIndicator: UIActivityIndicatorView!
     

@@ -53,18 +53,8 @@ class TableViewController: UITableViewController {
         }
     
     
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        // get the app delegate
-        appDelegate = UIApplication.shared.delegate as! AppDelegate
-        
-        
-    }
-    
+
     override func viewWillAppear(_ animated: Bool) {
-        //self.parseRequest()
         super.viewWillAppear(animated)
         OTMClient.sharedInstance().getStudents { (students, error) in
             if let students = students{
@@ -77,10 +67,7 @@ class TableViewController: UITableViewController {
     
     func userPinExists()-> Bool{
         for student in self.students{
-            print (OTMCurrentUser.firstName)
-            print(OTMCurrentUser.lastName)
             if student.firstName == OTMCurrentUser.firstName && student.lastName == OTMCurrentUser.lastName{
-                print("Found it")
                 return true
             }
             else{
@@ -156,38 +143,4 @@ class TableViewController: UITableViewController {
     }
     
 }
-
-//    //MARK: - ableViewController (UITableViewController)
-//
-//extension TableViewController {
-//    
-//    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        
-//        // get cell type
-//        let cellReuseIdentifier = "StudentTableViewCell"
-//        let movie = movies[(indexPath as NSIndexPath).row]
-//        let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as UITableViewCell!
-//        
-//        // set cell defaults
-//        cell?.textLabel!.text = movie.title
-//        cell?.imageView!.image = UIImage(named: "Film Icon")
-//        cell?.imageView!.contentMode = UIViewContentMode.scaleAspectFit
-//    
-//        return cell!
-//    }
-//    
-//    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return movies.count
-//    }
-//    
-//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        
-//        // push the movie detail view
-//        let controller = storyboard!.instantiateViewController(withIdentifier: "MovieDetailViewController") as! MovieDetailViewController
-//        controller.movie = movies[(indexPath as NSIndexPath).row]
-//        navigationController!.pushViewController(controller, animated: true)
-//    }
-//    
-//    
-//}
 

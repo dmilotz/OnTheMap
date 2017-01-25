@@ -115,8 +115,10 @@ class LoginViewController: UIViewController {
         
             OTMCurrentUser.firstName = parsedResults["first_name"] as! String
             OTMCurrentUser.lastName = parsedResults["last_name"] as! String
-            self.completeLogin()
             self.waitingIndicator.stopAnimating()
+            self.waitingIndicator.isHidden = true
+            self.completeLogin()
+            
             
         })
         
