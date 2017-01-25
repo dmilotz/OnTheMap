@@ -23,7 +23,6 @@
 		1171DEF21E1A441000E667BC /* OTMStudent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1171DEF11E1A441000E667BC /* OTMStudent.swift */; };
 		1171DEF61E1B5E9700E667BC /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1171DEF51E1B5E9700E667BC /* TableViewController.swift */; };
 		1171DEF81E1B64FA00E667BC /* EnterStudentInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1171DEF71E1B64FA00E667BC /* EnterStudentInfoViewController.swift */; };
-		11C04F1B1E3085BB009D23FC /* CurrentUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C04F1A1E3085BB009D23FC /* CurrentUserInfo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,7 +65,6 @@
 		1171DEF11E1A441000E667BC /* OTMStudent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OTMStudent.swift; path = OnTheMap/OTMStudent.swift; sourceTree = "<group>"; };
 		1171DEF51E1B5E9700E667BC /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TableViewController.swift; path = OnTheMap/TableViewController.swift; sourceTree = "<group>"; };
 		1171DEF71E1B64FA00E667BC /* EnterStudentInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EnterStudentInfoViewController.swift; path = OnTheMap/EnterStudentInfoViewController.swift; sourceTree = "<group>"; };
-		11C04F1A1E3085BB009D23FC /* CurrentUserInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentUserInfo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -191,7 +189,6 @@
 				1124C1381E27176000B0A266 /* OTMConvenience.swift */,
 				1171DEF11E1A441000E667BC /* OTMStudent.swift */,
 				1124C13A1E27315300B0A266 /* OTMCurrentUser.swift */,
-				11C04F1A1E3085BB009D23FC /* CurrentUserInfo.swift */,
 			);
 			name = OTM;
 			sourceTree = "<group>";
@@ -341,7 +338,6 @@
 				1119B9A01DDAE0F6002E70D6 /* AppDelegate.swift in Sources */,
 				1124C13B1E27315300B0A266 /* OTMCurrentUser.swift in Sources */,
 				1119B9D01DDC0459002E70D6 /* OTMConstants.swift in Sources */,
-				11C04F1B1E3085BB009D23FC /* CurrentUserInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

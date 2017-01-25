@@ -39,7 +39,7 @@ class OTMClient : NSObject {
     
     
     
-    func udacityLogin(_ userName: String, password: String,   completionHandlerLogin: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) {
+    func udacityLogin(_ userName: String, password: String,   completionHandlerLogin: @escaping (_ result: AnyObject?, _ error: String?) -> Void) {
         
         
         let jsonBody  = "{\"udacity\": {\"username\":\"" + userName + "\", \"password\": \"" + password + "\"}}"
@@ -57,8 +57,7 @@ class OTMClient : NSObject {
             
             func sendError(_ error: String) {
                 print(error)
-                let userInfo = [NSLocalizedDescriptionKey : error]
-                completionHandlerLogin(nil, NSError(domain: "UdacityLogin", code: 1, userInfo: userInfo))
+                completionHandlerLogin(nil, error)
             }
             
             /* GUARD: Was there an error? */
@@ -68,9 +67,18 @@ class OTMClient : NSObject {
             }
             
             /* GUARD: Did we get a successful 2XX response? */
-            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
-                sendError("Your request returned a status code other than 2xx!")
-                return
+            let statusCode = (response as? HTTPURLResponse)?.statusCode
+            
+            switch statusCode!{
+            case 400:
+                    sendError("Bad request.")
+            case 401:
+                    sendError("Username or password are wrong.  Please try again.")
+            case 403:
+                    sendError("Username or password are wrong.  Please try again.")
+            case 404:
+                    sendError("Server not found. Please check the url and try again.")
+            default:break
             }
             
             /* GUARD: Was there any data returned? */
@@ -167,8 +175,6 @@ class OTMClient : NSObject {
             }
             let range = Range(uncheckedBounds: (5, data!.count - 5))
             let newData = data?.subdata(in: range) /* subset response data! */
-            print(NSString(data: newData!, encoding: String.Encoding.utf8.rawValue)!)
-    
             completionHandlerLogout(newData as AnyObject?, error as NSError?)
         }
         task.resume()
@@ -213,8 +219,6 @@ class OTMClient : NSObject {
                 return
             }
             
-            let convertedData = (NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)
-            print(convertedData)
             
             /* 5. Parse the data */
             let parsedResult: [String:AnyObject]!
@@ -224,7 +228,6 @@ class OTMClient : NSObject {
                 print("Could not parse the data as JSON: '\(data)'")
                 return
             }
-            print("ParsedResult = " + String(describing: parsedResult))
             
             completionHandlerForGET(parsedResult as AnyObject?, nil)
             
@@ -258,7 +261,6 @@ class OTMClient : NSObject {
         let task = session.dataTask(with: request as URLRequest) { (data, response, error) in
             
             func sendError(_ error: String) {
-                print(error)
                 let userInfo = [NSLocalizedDescriptionKey : error]
                 completionHandlerForPOST(nil, NSError(domain: "taskForGETMethod", code: 1, userInfo: userInfo))
             }

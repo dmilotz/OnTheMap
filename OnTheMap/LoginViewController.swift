@@ -13,6 +13,8 @@ class LoginViewController: UIViewController {
     
     // MARK: Outlets
     
+    @IBOutlet var waitingIndicator: UIActivityIndicatorView!
+    
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
@@ -21,6 +23,9 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tap(gesture:)))
+        self.view.addGestureRecognizer(tapGesture)
         
         // get the app delegate
         appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -31,14 +36,25 @@ class LoginViewController: UIViewController {
         subscribeToNotification(.UIKeyboardWillHide, selector: #selector(keyboardWillHide))
         subscribeToNotification(.UIKeyboardDidShow, selector: #selector(keyboardDidShow))
         subscribeToNotification(.UIKeyboardDidHide, selector: #selector(keyboardDidHide))
+        waitingIndicator.isHidden = true
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         unsubscribeFromAllNotifications()
+        usernameTextField.text = ""
+        passwordTextField.text = ""
     }
     
-    // MARK: Login
+    
+    func tap(gesture: UITapGestureRecognizer) {
+        passwordTextField.resignFirstResponder()
+        usernameTextField.resignFirstResponder()
+    }
+
+    
+    
     private func displayError(_ error: String) {
         OperationQueue.main.addOperation {
             let alertController = UIAlertController(title: "Login Error", message:
@@ -48,20 +64,25 @@ class LoginViewController: UIViewController {
         }
        
     }
+    
+    
     @IBAction func loginPressed(_ sender: AnyObject) {
         
         
         if usernameTextField.text!.isEmpty || passwordTextField.text!.isEmpty {
-            debugTextLabel.text = "Username or Password Empty."
+            displayError("Username or Password is empty.")
         } else {
-                OTMClient.sharedInstance().udacityLogin(usernameTextField.text!, password: passwordTextField.text!, completionHandlerLogin: { (results, error) in
+            self.waitingIndicator.isHidden = false
+            self.waitingIndicator.startAnimating()
+            OTMClient.sharedInstance().udacityLogin(usernameTextField.text!, password: passwordTextField.text!, completionHandlerLogin: { (results, error) in
                     if (error != nil){
-                        self.debugTextLabel.text = String(describing: error)
-                        self.displayError(String(describing: error))
+                        self.waitingIndicator.stopAnimating()
+                        self.waitingIndicator.isHidden = true
+                        self.displayError(error!)
                         return
                     }else{
-                        self.setCurrentUser(results: results!)
-                        //self.completeLogin()
+                       self.setCurrentUser(results: results!)
+
                     }
                     
                 })
@@ -70,30 +91,32 @@ class LoginViewController: UIViewController {
         }
     }
     
+    
+    
+    
     func setCurrentUser(results : AnyObject){
         guard let accountInfo = results["account"] as? [String:AnyObject] else{
-            print("Can't find key 'account' in results")
+           // print("Can't find key 'account' in results")
             return
         }
         
         OTMCurrentUser.userId = accountInfo["key"] as! String
-        
-        print("User ID stored" + OTMCurrentUser.userId)
-        
+                
         OTMClient.sharedInstance().getUdacityStudentInfo(url: OTMClient.Constants.udacityGetUserUrl, completionHandlerForGetStudent: { (results, error) in
             
             if (error != nil){
-                print("error")
+                //print("error")
                 return
             }
             guard let parsedResults = results?["user"] as? [String:AnyObject] else{
-                print("Can't find 'user' in results")
+                //print("Can't find 'user' in results")
                 return
             }
         
             OTMCurrentUser.firstName = parsedResults["first_name"] as! String
             OTMCurrentUser.lastName = parsedResults["last_name"] as! String
             self.completeLogin()
+            self.waitingIndicator.stopAnimating()
             
         })
         

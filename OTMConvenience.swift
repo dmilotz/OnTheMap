@@ -15,13 +15,11 @@ extension OTMClient{
         /* Make the request */
         let _ = taskForParseGETMethod(url: Constants.parseUrl) {(parsedResults, error) in
             /* 3. Send to completion handler */
-            print(parsedResults)
             if let error = error {
                 completionHandlerForGetStudents(nil, error)
             } else {
                 /* GUARD: Is the "results" key in parsedResult? */
                 guard let results = parsedResults!["results"] as? [[String:AnyObject]] else {
-                    print("Cannot find key 'results' in \(parsedResults)")
                     return
                 }
                     let students = OTMStudent.studentsFromResults(results)
@@ -53,30 +51,7 @@ extension OTMClient{
         }
     }
     
-//    func getCurrentStudent(_ completionHandlerForGetCurrentStudent: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) {
-//        
-//        
-//        /* Make the request */
-//        let _ = taskForUdacityGETMethod(url: Constants.udacityGetUserUrl) {(parsedResults, error) in
-//            /* 3. Send to completion handler */
-//            print(parsedResults)
-//            if let error = error {
-//                completionHandlerForGetCurrentStudent(nil, error)
-//            } else {
-//                /* GUARD: Is the "results" key in parsedResult? */
-//                guard let results = parsedResults!["user"] as? [String:AnyObject] else {
-//                    print("Cannot find key 'results' in \(parsedResults)")
-//                    return
-//                }
-//                
-//                
-//                completionHandlerForGetCurrentStudent(results as AnyObject?, nil)
-//                
-//            }
-//        }
-//    }
-    
-    
+
 
     
     

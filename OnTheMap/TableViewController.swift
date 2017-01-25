@@ -18,8 +18,14 @@ class TableViewController: UITableViewController {
    
     
     @IBAction func createPin(_ sender: Any) {
-        let controller = self.storyboard!.instantiateViewController(withIdentifier: "EnterStudentInfoViewController") 
+        
+        if (userPinExists()){
+            displayOverwriteAlert()
+        }
+        else{
+        let controller = self.storyboard!.instantiateViewController(withIdentifier: "EnterStudentInfoViewController")
         self.present(controller, animated: true, completion: nil)
+        }
     }
     // MARK: Life Cycle
     
@@ -68,6 +74,39 @@ class TableViewController: UITableViewController {
         }
     }
 
+    
+    func userPinExists()-> Bool{
+        for student in self.students{
+            print (OTMCurrentUser.firstName)
+            print(OTMCurrentUser.lastName)
+            if student.firstName == OTMCurrentUser.firstName && student.lastName == OTMCurrentUser.lastName{
+                print("Found it")
+                return true
+            }
+            else{
+                return false
+            }
+        }
+        
+        return false
+        
+    }
+    
+    private func displayOverwriteAlert() {
+        let overwriteAlert = UIAlertController(title: "Overwrite?", message: "Current User Already Exists", preferredStyle: UIAlertControllerStyle.alert)
+        
+        overwriteAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+            let controller = self.storyboard!.instantiateViewController(withIdentifier: "EnterStudentInfoViewController")
+            self.present(controller, animated: true, completion: nil)            }))
+        
+        overwriteAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
+            return            }))
+        
+        self.present(overwriteAlert, animated: true, completion: nil)
+        
+    }
+    
+    
     private func displayAlert(_ message: String, title: String) {
         OperationQueue.main.addOperation {
             let alertController = UIAlertController(title: title, message:
@@ -101,10 +140,7 @@ class TableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let student = self.students[(indexPath as NSIndexPath).row]
-//        if student.mediaUrl != nil{
-//            print(student.mediaUrl)
-//            UIApplication.shared.openURL(URL(string: student.mediaUrl!)!)
-//        }
+
         if let url = URL(string: student.mediaUrl!){
             UIApplication.shared.openURL(url)
         }

@@ -33,7 +33,6 @@ struct OTMStudent {
         mediaUrl = dictionary["mediaURL"] as? String
         longitude = dictionary["longitude"] as? Double
         latitude = dictionary["latitude"] as? Double
-       // createdAt = dictionary["createdAt"] as! Date
         objectId = dictionary["objectId"] as AnyObject
     }
     

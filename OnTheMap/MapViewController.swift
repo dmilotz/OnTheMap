@@ -19,6 +19,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     var flagDone: Bool = false
     
     @IBAction func createStudent(_ sender: Any) {
+        if (userPinExists()){
+            displayOverwriteAlert()
+        }
+        
         let controller = self.storyboard!.instantiateViewController(withIdentifier: "EnterStudentInfoViewController")
         self.present(controller, animated: true, completion: nil)
     }
@@ -44,8 +48,38 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         })
     }
     
+    func userPinExists()-> Bool{
+        for student in self.students{
+            print (OTMCurrentUser.firstName)
+            print(OTMCurrentUser.lastName)
+            if student.firstName == OTMCurrentUser.firstName && student.lastName == OTMCurrentUser.lastName{
+                print("Found it")
+                return true
+            }
+            else{
+                return false
+            }
+        }
+        
+        return false
+        
+    }
+   
+    private func displayOverwriteAlert() {
+            let overwriteAlert = UIAlertController(title: "Overwrite?", message: "Current User Already Exists", preferredStyle: UIAlertControllerStyle.alert)
+            
+            overwriteAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+                let controller = self.storyboard!.instantiateViewController(withIdentifier: "EnterStudentInfoViewController")
+                self.present(controller, animated: true, completion: nil)            }))
+            
+            overwriteAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
+                return            }))
+            
+            self.present(overwriteAlert, animated: true, completion: nil)
+        
+    }
     
-    // MARK: Login
+    
     private func displayAlert(_ message: String, title: String) {
         OperationQueue.main.addOperation {
             let alertController = UIAlertController(title: title, message:
@@ -139,9 +173,17 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if control == view.rightCalloutAccessoryView {
-            let app = UIApplication.shared
             if let toOpen = view.annotation?.subtitle! {
-                app.openURL(URL(string: toOpen)!)
+                if let url = URL(string: toOpen){
+                    UIApplication.shared.openURL(url)
+                }
+                else{
+                    let alertController = UIAlertController(title: "Url Error", message:
+                        "Url did not work.", preferredStyle: UIAlertControllerStyle.alert)
+                    alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default,handler: nil))
+                    
+                    self.present(alertController, animated: true, completion: nil)
+                }
             }
         }
     }
