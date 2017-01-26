@@ -36,7 +36,6 @@ class LoginViewController: UIViewController {
         subscribeToNotification(.UIKeyboardWillHide, selector: #selector(keyboardWillHide))
         subscribeToNotification(.UIKeyboardDidShow, selector: #selector(keyboardDidShow))
         subscribeToNotification(.UIKeyboardDidHide, selector: #selector(keyboardDidHide))
-        waitingIndicator.isHidden = true
         
     }
     
@@ -47,6 +46,11 @@ class LoginViewController: UIViewController {
         passwordTextField.text = ""
     }
     
+    
+    override func willAnimateRotation(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
+        self.view.layer.sublayers?.first?.frame = self.view.bounds
+        
+    }
     
     func tap(gesture: UITapGestureRecognizer) {
         passwordTextField.resignFirstResponder()
@@ -72,12 +76,15 @@ class LoginViewController: UIViewController {
         if usernameTextField.text!.isEmpty || passwordTextField.text!.isEmpty {
             displayError("Username or Password is empty.")
         } else {
-            self.waitingIndicator.isHidden = false
-            self.waitingIndicator.startAnimating()
+       
+            DispatchQueue.main.async{
+                self.waitingIndicator.startAnimating()
+            }
             OTMClient.sharedInstance().udacityLogin(usernameTextField.text!, password: passwordTextField.text!, completionHandlerLogin: { (results, error) in
                     if (error != nil){
-                        self.waitingIndicator.stopAnimating()
-                        self.waitingIndicator.isHidden = true
+                        DispatchQueue.main.async{
+                            self.waitingIndicator.stopAnimating()
+                        }
                         self.displayError(error!)
                         return
                     }else{
@@ -115,8 +122,10 @@ class LoginViewController: UIViewController {
         
             OTMCurrentUser.firstName = parsedResults["first_name"] as! String
             OTMCurrentUser.lastName = parsedResults["last_name"] as! String
-            self.waitingIndicator.stopAnimating()
-            self.waitingIndicator.isHidden = true
+            DispatchQueue.main.async{
+                self.waitingIndicator.stopAnimating()
+            }
+            
             self.completeLogin()
             
             
@@ -149,17 +158,17 @@ extension LoginViewController: UITextFieldDelegate {
     // MARK: Show/Hide Keyboard
     
     func keyboardWillShow(_ notification: Notification) {
-        if !keyboardOnScreen {
-            view.frame.origin.y -= keyboardHeight(notification)
-
-        }
+//        if !keyboardOnScreen {
+//            view.frame.origin.y -= keyboardHeight(notification)
+//
+//        }
     }
     
     func keyboardWillHide(_ notification: Notification) {
-        if keyboardOnScreen {
-            view.frame.origin.y += keyboardHeight(notification)
-
-        }
+//        if keyboardOnScreen {
+//            view.frame.origin.y += keyboardHeight(notification)
+//
+//        }
     }
     
     func keyboardDidShow(_ notification: Notification) {

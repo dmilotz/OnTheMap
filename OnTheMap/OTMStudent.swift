@@ -11,6 +11,7 @@ import UIKit
 
 // MARK: - Pin
 
+
 struct OTMStudent {
     
     // MARK: Properties
@@ -43,9 +44,9 @@ struct OTMStudent {
 
             students.append(OTMStudent(dictionary: result))
             }
-
-        
         return students
     }
+    
+  var studentArray: [OTMStudent] = [OTMStudent]()
     
 }

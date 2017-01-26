@@ -13,14 +13,12 @@ class TableViewController: UITableViewController {
     
     // MARK: Properties
     
-    var appDelegate: AppDelegate!
-    var students: [OTMStudent] = [OTMStudent]()
-   
+    var appDelegate: AppDelegate!   
     
     @IBAction func createPin(_ sender: Any) {
         
         if (userPinExists()){
-            displayOverwriteAlert()
+            self.displayOverwriteAlert()
         }
         else{
         let controller = self.storyboard!.instantiateViewController(withIdentifier: "EnterStudentInfoViewController")
@@ -30,13 +28,7 @@ class TableViewController: UITableViewController {
     // MARK: Life Cycle
     
     @IBAction func refreshTable(_ sender: Any) {
-        OTMClient.sharedInstance().getStudents { (students, error) in
-            if let students = students{
-                self.students = students
-            }
-            self.tableView.reloadData()
-        }
-        
+        getStudents()
     }
     
     @IBAction func logout(_ sender: Any) {
@@ -56,17 +48,27 @@ class TableViewController: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        OTMClient.sharedInstance().getStudents { (students, error) in
-            if let students = students{
-                self.students = students
-            }
-            self.tableView.reloadData()
-        }
+        getStudents()
     }
 
     
+    func getStudents(){
+        OTMClient.sharedInstance().getStudents { (error) in
+            if(error != nil){
+                self.displayAlert("Failed to download student data.", title:"Error")
+                return
+            }
+            else{
+                self.tableView.reloadData()
+
+            }
+        }
+        
+        
+    }
+    
     func userPinExists()-> Bool{
-        for student in self.students{
+        for student in StudentDataSource.sharedInstance.studentData{
             if student.firstName == OTMCurrentUser.firstName && student.lastName == OTMCurrentUser.lastName{
                 return true
             }
@@ -79,41 +81,17 @@ class TableViewController: UITableViewController {
         
     }
     
-    private func displayOverwriteAlert() {
-        let overwriteAlert = UIAlertController(title: "Overwrite?", message: "Current User Already Exists", preferredStyle: UIAlertControllerStyle.alert)
-        
-        overwriteAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
-            let controller = self.storyboard!.instantiateViewController(withIdentifier: "EnterStudentInfoViewController")
-            self.present(controller, animated: true, completion: nil)            }))
-        
-        overwriteAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
-            return            }))
-        
-        self.present(overwriteAlert, animated: true, completion: nil)
-        
-    }
-    
-    
-    private func displayAlert(_ message: String, title: String) {
-        OperationQueue.main.addOperation {
-            let alertController = UIAlertController(title: title, message:
-                message, preferredStyle: UIAlertControllerStyle.alert)
-            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default,handler: nil))
-            self.present(alertController, animated: true, completion: nil)
-        }
-        
-    }
 
 
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.students.count
+        return StudentDataSource.sharedInstance.studentData.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCell")!
-        let student = self.students[(indexPath as NSIndexPath).row]
+        let student = StudentDataSource.sharedInstance.studentData[(indexPath as NSIndexPath).row]
         if student.firstName == nil || student.lastName == nil{
              cell.textLabel?.text = "No Name Provided"}
         else{
@@ -126,7 +104,7 @@ class TableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let student = self.students[(indexPath as NSIndexPath).row]
+        let student = StudentDataSource.sharedInstance.studentData[(indexPath as NSIndexPath).row]
 
         if let url = URL(string: student.mediaUrl!){
             UIApplication.shared.openURL(url)

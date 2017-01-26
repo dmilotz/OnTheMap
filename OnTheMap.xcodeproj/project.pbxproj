@@ -20,6 +20,8 @@
 		1124C1391E27176000B0A266 /* OTMConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1124C1381E27176000B0A266 /* OTMConvenience.swift */; };
 		1124C13B1E27315300B0A266 /* OTMCurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1124C13A1E27315300B0A266 /* OTMCurrentUser.swift */; };
 		1124C13D1E2C4D3100B0A266 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1124C13C1E2C4D3100B0A266 /* FBSDKLoginKit.framework */; };
+		1128D1931E398FB100AFAB20 /* StudentDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1128D1921E398FB100AFAB20 /* StudentDataSource.swift */; };
+		1128D1951E39946D00AFAB20 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1128D1941E39946D00AFAB20 /* UIViewExtension.swift */; };
 		1171DEF21E1A441000E667BC /* OTMStudent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1171DEF11E1A441000E667BC /* OTMStudent.swift */; };
 		1171DEF61E1B5E9700E667BC /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1171DEF51E1B5E9700E667BC /* TableViewController.swift */; };
 		1171DEF81E1B64FA00E667BC /* EnterStudentInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1171DEF71E1B64FA00E667BC /* EnterStudentInfoViewController.swift */; };
@@ -62,6 +64,8 @@
 		1124C1381E27176000B0A266 /* OTMConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMConvenience.swift; sourceTree = "<group>"; };
 		1124C13A1E27315300B0A266 /* OTMCurrentUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMCurrentUser.swift; sourceTree = "<group>"; };
 		1124C13C1E2C4D3100B0A266 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		1128D1921E398FB100AFAB20 /* StudentDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentDataSource.swift; sourceTree = "<group>"; };
+		1128D1941E39946D00AFAB20 /* UIViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		1171DEF11E1A441000E667BC /* OTMStudent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OTMStudent.swift; path = OnTheMap/OTMStudent.swift; sourceTree = "<group>"; };
 		1171DEF51E1B5E9700E667BC /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TableViewController.swift; path = OnTheMap/TableViewController.swift; sourceTree = "<group>"; };
 		1171DEF71E1B64FA00E667BC /* EnterStudentInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EnterStudentInfoViewController.swift; path = OnTheMap/EnterStudentInfoViewController.swift; sourceTree = "<group>"; };
@@ -169,6 +173,7 @@
 				1119B9CD1DDBFC53002E70D6 /* LoginViewController.swift */,
 				1171DEF51E1B5E9700E667BC /* TableViewController.swift */,
 				1171DEF71E1B64FA00E667BC /* EnterStudentInfoViewController.swift */,
+				1128D1941E39946D00AFAB20 /* UIViewExtension.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -189,6 +194,7 @@
 				1124C1381E27176000B0A266 /* OTMConvenience.swift */,
 				1171DEF11E1A441000E667BC /* OTMStudent.swift */,
 				1124C13A1E27315300B0A266 /* OTMCurrentUser.swift */,
+				1128D1921E398FB100AFAB20 /* StudentDataSource.swift */,
 			);
 			name = OTM;
 			sourceTree = "<group>";
@@ -332,10 +338,12 @@
 				1119B9CE1DDBFC53002E70D6 /* LoginViewController.swift in Sources */,
 				1171DEF61E1B5E9700E667BC /* TableViewController.swift in Sources */,
 				1119B9A21DDAE0F6002E70D6 /* MapViewController.swift in Sources */,
+				1128D1931E398FB100AFAB20 /* StudentDataSource.swift in Sources */,
 				111F3A191E22003C003172D9 /* NetworkClient.swift in Sources */,
 				1171DEF81E1B64FA00E667BC /* EnterStudentInfoViewController.swift in Sources */,
 				1171DEF21E1A441000E667BC /* OTMStudent.swift in Sources */,
 				1119B9A01DDAE0F6002E70D6 /* AppDelegate.swift in Sources */,
+				1128D1951E39946D00AFAB20 /* UIViewExtension.swift in Sources */,
 				1124C13B1E27315300B0A266 /* OTMCurrentUser.swift in Sources */,
 				1119B9D01DDC0459002E70D6 /* OTMConstants.swift in Sources */,
 			);

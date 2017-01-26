@@ -15,7 +15,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     // is set up as the map view's delegate.
  
     @IBOutlet var mapView: MKMapView!
-    var students: [OTMStudent] = [OTMStudent]()
     var flagDone: Bool = false
     
     @IBAction func createStudent(_ sender: Any) {
@@ -49,11 +48,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     func userPinExists()-> Bool{
-        for student in self.students{
-            print (OTMCurrentUser.firstName)
-            print(OTMCurrentUser.lastName)
+        for student in StudentDataSource.sharedInstance.studentData{
             if student.firstName == OTMCurrentUser.firstName && student.lastName == OTMCurrentUser.lastName{
-                print("Found it")
                 return true
             }
             else{
@@ -64,35 +60,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         return false
         
     }
-   
-    private func displayOverwriteAlert() {
-            let overwriteAlert = UIAlertController(title: "Overwrite?", message: "Current User Already Exists", preferredStyle: UIAlertControllerStyle.alert)
-            
-            overwriteAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
-                let controller = self.storyboard!.instantiateViewController(withIdentifier: "EnterStudentInfoViewController")
-                self.present(controller, animated: true, completion: nil)            }))
-            
-            overwriteAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
-                return            }))
-            
-            self.present(overwriteAlert, animated: true, completion: nil)
-        
-    }
-    
-    
-    private func displayAlert(_ message: String, title: String) {
-        OperationQueue.main.addOperation {
-            let alertController = UIAlertController(title: title, message:
-                message, preferredStyle: UIAlertControllerStyle.alert)
-            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default,handler: nil))
-            self.present(alertController, animated: true, completion: nil)
-        }
-        
-    }
-    override func viewDidLoad() {
-       //getStudents()
-    }
-    
+
+
     override func viewWillAppear(_ animated: Bool) {
        getStudents()
     }
@@ -104,13 +73,15 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func getStudents(){
         
-        OTMClient.sharedInstance().getStudents { (students, error) in
-            if let students = students{
-                
-                self.students = students
+        OTMClient.sharedInstance().getStudents { (error) in
+            if (error != nil){
+                self.displayAlert("Failed to download student data.", title: "Error")
+                return
+            }
+            else{
                 
                 var annotations = [MKPointAnnotation]()
-                for Student in self.students{
+                for Student in StudentDataSource.sharedInstance.studentData{
                     if Student.latitude == nil || Student.longitude == nil || Student.firstName == nil || Student.lastName == nil {
                         break
                     }
@@ -139,11 +110,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                         annotations.append(annotation)
                     }
                 }
-                
+                self.mapView.removeAnnotations(self.mapView.annotations)
                 self.mapView.addAnnotations(annotations)
                
             }
-
         }
 
 

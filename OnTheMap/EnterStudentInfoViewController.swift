@@ -29,15 +29,16 @@ class EnterStudentInfoViewController: UIViewController, MKMapViewDelegate, UITex
     @IBOutlet var textField: UITextField!
     
     @IBAction func cancelButton(_ sender: Any) {
-       goToMapView()
+       self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func Submit(_ sender: UIButton) {
         switch sender.currentTitle! {
             case "Find On The Map":
                 self.locationName = textField.text!
-                waitingIndicator.isHidden=false
-                waitingIndicator.startAnimating()
+                DispatchQueue.main.async{
+                    self.waitingIndicator.startAnimating()
+                }
                 self.placePinLocation()
                 textField.resignFirstResponder()
             case "Submit":
@@ -45,7 +46,7 @@ class EnterStudentInfoViewController: UIViewController, MKMapViewDelegate, UITex
                 if(validUrl){
                 self.postToParse()
                 }else{
-                    displayError("Please Enter A Valid URL", error: "")
+                    displayAlert("Please Enter A Valid URL", title: "")
                 }
             default: break
             }
@@ -92,14 +93,7 @@ class EnterStudentInfoViewController: UIViewController, MKMapViewDelegate, UITex
     func resizeFontInTextView(){
     
     }
-    
-    
-    func goToMapView(){
-        OperationQueue.main.addOperation{
-            let controller = self.storyboard!.instantiateViewController(withIdentifier: "TabBarController") as! UITabBarController
-            self.present(controller, animated: true, completion: nil)}
-    }
-    
+
  
     
     
@@ -159,27 +153,17 @@ class EnterStudentInfoViewController: UIViewController, MKMapViewDelegate, UITex
         
         OTMClient.sharedInstance().taskForParsePOSTMethod(url: OTMClient.Constants.parseUrl, jsonBody: postParams, completionHandlerForPOST: {(results,error) in
             if (error != nil){
-                self.displayError("", error: String(describing: error))
+                self.displayAlert("Error", title: String(describing: error!.localizedDescription))
                 
             }
             else{
-               self.goToMapView()
-                
+                    self.dismiss(animated: true, completion: nil)
             }
         })
     
     }
     
     
-    private func displayError(_ title: String, error: String) {
-        OperationQueue.main.addOperation {
-            let alertController = UIAlertController(title: title, message:
-                error, preferredStyle: UIAlertControllerStyle.alert)
-            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default,handler: nil))
-            self.present(alertController, animated: true, completion: nil)
-        }
-        
-    }
     
     
     func subscribeToKeyboardNotifications() {
@@ -196,7 +180,6 @@ class EnterStudentInfoViewController: UIViewController, MKMapViewDelegate, UITex
     
     func keyboardWillShow(notification: Notification) {
         if textField.isEditing  == true{
-            print (getKeyboardHeight(notification: notification))
             let height = getKeyboardHeight(notification: notification)
             view.frame.origin.y -= height/3
         }
@@ -217,9 +200,10 @@ class EnterStudentInfoViewController: UIViewController, MKMapViewDelegate, UITex
     func placePinLocation(){
         CLGeocoder().geocodeAddressString(self.locationName, completionHandler: {(placemarks,error) in
             if error != nil {
-                self.displayError("Location not found, please try again.", error: "")
-                self.waitingIndicator.stopAnimating()
-                self.waitingIndicator.isHidden=true
+                self.displayAlert("Location not found, please try again.", title: "Error")
+                DispatchQueue.main.async{
+                    self.waitingIndicator.stopAnimating()
+                }
                 
                 return
             }
@@ -238,14 +222,19 @@ class EnterStudentInfoViewController: UIViewController, MKMapViewDelegate, UITex
                 annotation.coordinate = locationCoordinate
                 annotations.append(annotation)
                 self.mapView.addAnnotations(annotations)
-                self.waitingIndicator.stopAnimating()
-                self.waitingIndicator.isHidden=true
+                DispatchQueue.main.async{
+                    self.waitingIndicator.stopAnimating()
+                }
                 self.changeDisplayAfterLocationEntered()
+                let span = MKCoordinateSpanMake(5, 5)
+                let region = MKCoordinateRegion(center: coordinate!, span: span)
+                self.mapView.setRegion(region, animated: true)
                 
             }else{
-                self.displayError("Location was not found. Please try again.", error: "")
-                self.waitingIndicator.stopAnimating()
-                self.waitingIndicator.isHidden=true
+                self.displayAlert("Location was not found. Please try again.", title: "Error")
+                DispatchQueue.main.async{
+                    self.waitingIndicator.stopAnimating()
+                }
                 self.firstDisplayState()
                 return
             }
