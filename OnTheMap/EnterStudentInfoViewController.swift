@@ -9,51 +9,26 @@
 import Foundation
 import UIKit
 import MapKit
-class EnterStudentInfoViewController: UIViewController, MKMapViewDelegate, UITextFieldDelegate, UITextViewDelegate{
-    
+class EnterStudentInfoViewController: UIViewController{
+  
+    /// MARK: Properties
     var locationName: String = ""
     var longitude: Double = 0
     var latitude: Double = 0
     
 
-   
+  
+    /// MARK: Outlets
     @IBOutlet var waitingIndicator: UIActivityIndicatorView!
-    
     @IBOutlet var mapView: MKMapView!
-
     @IBOutlet var otmButton: UIButton!
-    
-    
     @IBOutlet var linkTextView: UITextView!
-    
     @IBOutlet var textField: UITextField!
-    
-    @IBAction func cancelButton(_ sender: Any) {
-       self.dismiss(animated: true, completion: nil)
-    }
-    
-    @IBAction func Submit(_ sender: UIButton) {
-        switch sender.currentTitle! {
-            case "Find On The Map":
-                self.locationName = textField.text!
-                DispatchQueue.main.async{
-                    self.waitingIndicator.startAnimating()
-                }
-                self.placePinLocation()
-                textField.resignFirstResponder()
-            case "Submit":
-                let validUrl = UIApplication.shared.canOpenURL( NSURL(string: linkTextView.text) as! URL)
-                if(validUrl){
-                self.postToParse()
-                }else{
-                    displayAlert("Please Enter A Valid URL", title: "")
-                }
-            default: break
-            }
-        }
-    
-    
- 
+
+}
+
+// MARK: - Lifecycle methods
+  extension EnterStudentInfoViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         textField.delegate = self
@@ -83,26 +58,151 @@ class EnterStudentInfoViewController: UIViewController, MKMapViewDelegate, UITex
         super.viewWillDisappear(true)
         unsubscribeFromKeyboardNotifications()
     }
+}
 
-    
-    func tap(gesture: UITapGestureRecognizer) {
+
+// MARK: - Actions
+extension EnterStudentInfoViewController{
+  @IBAction func cancelButton(_ sender: Any) {
+    self.dismiss(animated: true, completion: nil)
+  }
+  @IBAction func Submit(_ sender: UIButton) {
+    switch sender.currentTitle! {
+    case "Find On The Map":
+      self.locationName = textField.text!
+      DispatchQueue.main.async{
+        self.waitingIndicator.startAnimating()
+      }
+      self.placePinLocation()
+      textField.resignFirstResponder()
+    case "Submit":
+      let validUrl = UIApplication.shared.canOpenURL( NSURL(string: linkTextView.text) as! URL)
+      if(validUrl){
+        self.postToParse()
+      }else{
+        displayAlert("Please Enter A Valid URL", title: "")
+      }
+    default: break
+    }
+  }
+}
+
+private extension EnterStudentInfoViewController{
+
+    @objc func tap(gesture: UITapGestureRecognizer) {
         textField.resignFirstResponder()
         linkTextView.resignFirstResponder()
     }
-    
+
     func resizeFontInTextView(){
     
     }
+  
+  
+  func firstDisplayState(){
+    mapView.isHidden = true
+    
+    otmButton.setTitle("Find On The Map", for: UIControlState.normal)
+    otmButton.layer.cornerRadius = 5
+    
+    textField.isHidden = false
+    textField.clearsOnBeginEditing = true
+    textField.borderStyle = UITextBorderStyle.none
+    textField.layer.borderWidth = 0.0
+    
+    linkTextView.layer.borderWidth = 0.0
+    linkTextView.text = "Where are you studying today?"
+    
+  }
+  
+  func changeDisplayAfterLocationEntered(){
+    self.mapView.isHidden = false
+    self.otmButton.setTitle("Submit", for: UIControlState.normal)
+    self.textField.isHidden = true
+    self.linkTextView.isEditable = true
+    self.linkTextView.text = "Enter a link to share here..."
+    
+  }
+  
+  func postToParse(){
+    
+    let postParams = "{\"uniqueKey\": \"" + OTMCurrentUser.userId + "\", \"firstName\": \"" + OTMCurrentUser.firstName + "\", \"lastName\": \"" + OTMCurrentUser.lastName + "\",\"mapString\": \""+locationName+"\", \"mediaURL\": \""+linkTextView.text!+"\",\"latitude\": \(Double(latitude)), \"longitude\": \(Double(longitude))}"
+    
+    OTMClient.sharedInstance().taskForParsePOSTMethod(url: OTMClient.Constants.parseUrl, jsonBody: postParams, completionHandlerForPOST: {(results,error) in
+      if (error != nil){
+        self.displayAlert("Error", title: String(describing: error!.localizedDescription))
+        
+      }
+      else{
+        self.dismiss(animated: true, completion: nil)
+      }
+    })
+    
 
- 
-    
-    
+}
+  
+  
+  func placePinLocation(){
+    CLGeocoder().geocodeAddressString(self.locationName, completionHandler: {(placemarks,error) in
+      if error != nil {
+        self.displayAlert("Location not found, please try again.", title: "Error")
+        DispatchQueue.main.async{
+          self.waitingIndicator.stopAnimating()
+        }
+        
+        return
+      }
+      if (placemarks?.count)! > 0 {
+        print (placemarks)
+        let placemark = placemarks?[0]
+        let location = placemark?.location
+        let coordinate = location?.coordinate
+        var annotations = [MKPointAnnotation]()
+        let lat = CLLocationDegrees((coordinate?.latitude)!)
+        let long = CLLocationDegrees((coordinate?.longitude)!)
+        self.latitude = lat
+        self.longitude = long
+        let locationCoordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = locationCoordinate
+        annotations.append(annotation)
+        self.mapView.addAnnotations(annotations)
+        DispatchQueue.main.async{
+          self.waitingIndicator.stopAnimating()
+        }
+        self.changeDisplayAfterLocationEntered()
+        let span = MKCoordinateSpanMake(5, 5)
+        let region = MKCoordinateRegion(center: coordinate!, span: span)
+        self.mapView.setRegion(region, animated: true)
+        
+      }else{
+        self.displayAlert("Location was not found. Please try again.", title: "Error")
+        DispatchQueue.main.async{
+          self.waitingIndicator.stopAnimating()
+        }
+        self.firstDisplayState()
+        return
+      }
+      
+      
+      
+      
+      
+      
+    })
+  }
+
+}
+
+// MARK: - UITextViewDelegate, UITextFieldDelegate
+extension EnterStudentInfoViewController: UITextViewDelegate, UITextFieldDelegate{
+  
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         textField.resignFirstResponder()
         return false
     }
-    
+  
     func textViewDidBeginEditing(_ textView: UITextView) {
         linkTextView.text=""
     }
@@ -121,48 +221,11 @@ class EnterStudentInfoViewController: UIViewController, MKMapViewDelegate, UITex
             return true
         }
     }
-    
-    func firstDisplayState(){
-        mapView.isHidden = true
-        
-        otmButton.setTitle("Find On The Map", for: UIControlState.normal)
-        otmButton.layer.cornerRadius = 5
-        
-        textField.isHidden = false
-        textField.clearsOnBeginEditing = true
-        textField.borderStyle = UITextBorderStyle.none
-        textField.layer.borderWidth = 0.0
-        
-        linkTextView.layer.borderWidth = 0.0
-        linkTextView.text = "Where are you studying today?"
-       
-    }
-    
-    func changeDisplayAfterLocationEntered(){
-        self.mapView.isHidden = false
-        self.otmButton.setTitle("Submit", for: UIControlState.normal)
-        self.textField.isHidden = true
-        self.linkTextView.isEditable = true
-        self.linkTextView.text = "Enter a link to share here..."
-        
-    }
-    
-    func postToParse(){
-       
-        let postParams = "{\"uniqueKey\": \"" + OTMCurrentUser.userId + "\", \"firstName\": \"" + OTMCurrentUser.firstName + "\", \"lastName\": \"" + OTMCurrentUser.lastName + "\",\"mapString\": \""+locationName+"\", \"mediaURL\": \""+linkTextView.text!+"\",\"latitude\": \(Double(latitude)), \"longitude\": \(Double(longitude))}"
-        
-        OTMClient.sharedInstance().taskForParsePOSTMethod(url: OTMClient.Constants.parseUrl, jsonBody: postParams, completionHandlerForPOST: {(results,error) in
-            if (error != nil){
-                self.displayAlert("Error", title: String(describing: error!.localizedDescription))
-                
-            }
-            else{
-                    self.dismiss(animated: true, completion: nil)
-            }
-        })
-    
-    }
-    
+}
+
+
+// MARK: - Keyboard notification methods
+  extension EnterStudentInfoViewController{
     
     
     
@@ -196,57 +259,11 @@ class EnterStudentInfoViewController: UIViewController, MKMapViewDelegate, UITex
         return keyboardSize.cgRectValue.height
     }
     
-    
-    func placePinLocation(){
-        CLGeocoder().geocodeAddressString(self.locationName, completionHandler: {(placemarks,error) in
-            if error != nil {
-                self.displayAlert("Location not found, please try again.", title: "Error")
-                DispatchQueue.main.async{
-                    self.waitingIndicator.stopAnimating()
-                }
-                
-                return
-            }
-            if (placemarks?.count)! > 0 {
-                print (placemarks)
-                let placemark = placemarks?[0]
-                let location = placemark?.location
-                let coordinate = location?.coordinate
-                var annotations = [MKPointAnnotation]()
-                let lat = CLLocationDegrees((coordinate?.latitude)!)
-                let long = CLLocationDegrees((coordinate?.longitude)!)
-                self.latitude = lat
-                self.longitude = long
-                let locationCoordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
-                let annotation = MKPointAnnotation()
-                annotation.coordinate = locationCoordinate
-                annotations.append(annotation)
-                self.mapView.addAnnotations(annotations)
-                DispatchQueue.main.async{
-                    self.waitingIndicator.stopAnimating()
-                }
-                self.changeDisplayAfterLocationEntered()
-                let span = MKCoordinateSpanMake(5, 5)
-                let region = MKCoordinateRegion(center: coordinate!, span: span)
-                self.mapView.setRegion(region, animated: true)
-                
-            }else{
-                self.displayAlert("Location was not found. Please try again.", title: "Error")
-                DispatchQueue.main.async{
-                    self.waitingIndicator.stopAnimating()
-                }
-                self.firstDisplayState()
-                return
-            }
-            
-            
-            
-            
-            
-        
-        })
-    }
+}
 
+
+// MARK: - MKMapViewDelegate
+extension EnterStudentInfoViewController: MKMapViewDelegate{
     
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
